@@ -1,0 +1,47 @@
+{
+	"pages": [
+		{
+			"path": "pages/home",
+			"style": {
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/setting"
+		},
+		{
+			"path": "pages/sideList",
+			"style": {
+				"enablePullDownRefresh": true
+			}
+		},{
+			"path": "pages/children/AddSide",
+			"style": {
+				"enablePullDownRefresh": true
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationStyle": "custom"
+	},
+	"condition": {
+		"current": 2,
+		"list":[{
+			"name": "设置",
+			"path": "pages/setting",
+			"query": "name=zhang"
+		},{
+			"name": "主页",
+			"path": "pages/home",
+			"query": "name=zhang"
+		},{
+			"name": "城市列表",
+			"path": "pages/sideList",
+			"query": "name=zhang"
+		},{
+			"name": "添加城市",
+			"path": "pages/children/AddSide",
+			"query": "name=zhang"
+		}]
+	}
+}
