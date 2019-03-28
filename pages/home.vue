@@ -1,147 +1,196 @@
 <template>
-	<view class="m-home" :style="{height: scrollHeight, 'background-color': 'rgba(21, 21, 21,' + opacity + ')'}">
+	<view class="m-home" :style="{'background-color': 'rgba(21, 21, 21,' + opacity + ')'}">
 		<view class="m-bg">
 			<image class="bgi" :src="bgImg" mode="widthFix"></image>
 		</view>
-		<view class="m-ct">
-			<view class="m-ct-hd">
-				<navigator class="iconfont ml" url="./sideList">&#xe6f9;</navigator>
-				<view class="m-hd-center">
-					<text class="iconfont">&#xe61f;</text>
-					<text v-text="noSide"></text>
-				</view>
-				<navigator class="iconfont mr" url="./setting">&#xe638;</navigator>
+		<view class="m-hd" :style="{'background-color': 'rgba(21, 21, 21,' + (opacity + 0.2) + ')'}">
+			<navigator class="iconfont ml" url="./sideList">&#xe6f9;</navigator>
+			<view class="m-hd-center">
+				<text class="iconfont" v-if="isNowSide">&#xe61f;</text>
+				<text v-text="noSide"></text>
 			</view>
+			<navigator class="iconfont mr" url="./setting">&#xe638;</navigator>
+		</view>
+		<view class="space-padding"></view>
+		<view class="m-ct">
 			<view class="ad-if">
-				<view class="ad-if-ct" v-if="isShowWarning">
+				<view class="ad-if-ct" v-if="isInfo">
 					<view class="ad-if-ct-item"
 					v-for="(value, index) in adviceList"
 					:key="index">
-						<uni-tag inverted="true" type="warning" 
+						<uni-tag inverted="true"
 						:text="value.name" 
 						@click="getMore(value.content)"></uni-tag>
 						<text class="tip" v-text="value.level"></text>
 					</view>
 				</view>
 			</view>
-			<scroll-view scroll-y 
-			:style="{height: boxHeight}" 
-			@scroll="scrollEvent" 
-			@scrolltoupper="scorllTop">
-				<text class="title-public">今日天气</text>
-				<view class="m-today">
-					<view class="m-today-hd">
-						<view class="m-today-hd-wendu">
-							<text class="iconfont" :class="['wh'+ toDay.img]"></text>
-							<text v-text="toDay.weather"></text>
-						</view>
-						<view class="m-today-hd-time">
-							<text>最近更新时间</text>
-							<text v-text="toDay.time"></text>
-						</view>
+			<text class="title-public">今日天气</text>
+			<view class="m-today">
+				<view class="m-today-hd">
+					<view class="m-today-hd-wendu">
+						<text class="iconfont" :class="['wh'+ toDay.img]"></text>
+						<text v-text="toDay.weather"></text>
 					</view>
-					<view class="m-today-ct">
-						<view class="m-today-ct-wendu">
-							<text class="iconfont wendu"></text>
-							<text v-text="toDay.temp"></text>
+					<view class="m-today-hd-time">
+						<text>最近更新时间</text>
+						<text v-text="toDay.time"></text>
+					</view>
+				</view>
+				<view class="m-today-ct">
+					<view class="m-today-ct-wendu">
+						<text class="iconfont wendu"></text>
+						<text v-text="toDay.temp"></text>
+						<text class="iconfont c"></text>
+					</view>
+					<view class="m-today-ct-wind">
+						<text class="iconfont wind"></text>
+						<text v-text="toDay.wD"></text>
+						<text v-text="toDay.wS"></text>
+					</view>
+					<view class="m-today-ct-ziwaxian">
+						<text class="iconfont ziwaixian"></text>
+						<text v-text="toDay.ziwaixian"></text>
+					</view>
+				</view>
+			</view>
+			<text class="title-public">未来一天内</text>
+			<view class="m-feature">
+				<view class="pull-time">
+					<text>更新时间</text>
+					<text class="time-pull" v-text="featurePullTime"></text>
+				</view>
+				<view class="m-feature-item"
+				v-for="(value, index) in featureList"
+				:key="index">
+					<view class="weather">
+						<text class="iconfont" :class="['wh' + value.img]"></text>
+					</view>
+					<view class="temperature">
+						<view class="highest-temperature">
+							<text class="iconfont high-temp"></text>
+							<text v-text="value.highestTemperature"></text> 
 							<text class="iconfont c"></text>
 						</view>
-						<view class="m-today-ct-wind">
-							<text class="iconfont wind"></text>
-							<text v-text="toDay.wD"></text>
-							<text v-text="toDay.wS"></text>
+						<view class="lowerest-temperature">
+							<text class="iconfont lower-temp"></text>
+							<text v-text="value.lowerestTemperature"></text> 
+							<text class="iconfont c"></text>
 						</view>
-						<view class="m-today-ct-ziwaxian">
-							<text class="iconfont ziwaixian"></text>
-							<text v-text="toDay.ziwaixian"></text>
+					</view>
+					<view class="time-aria">
+						<view class="start-time">
+							<text class="iconfont time-start"></text>
+							<text v-text="value.startTime"></text> 
+						</view>
+						<view class="end-time">
+							<text class="iconfont time-end"></text>
+							<text v-text="value.endTime"></text> 
 						</view>
 					</view>
 				</view>
-				<text class="title-public">未来一天内</text>
-				<view class="m-feature">
-					<view class="pull-time">
-						<text>更新时间</text>
-						<text class="time-pull" v-text="featurePullTime"></text>
+			</view>
+			<text class="title-public">一周天气</text>
+			<view class="week">
+				<view class="li"
+				v-for="(value, index) in weekReport"
+				:key="index">
+					<text class="week-day" v-text="value.week"></text>
+					<view class="weather">
+						<text class="iconfont" :class="['wh' + value.img]"></text>
+						<text v-text="value.weather"></text>
 					</view>
-					<view class="m-feature-item"
-					v-for="(value, index) in featureList"
-					:key="index">
-						<view class="weather">
-							<text class="iconfont" :class="['wh' + value.img]"></text>
-						</view>
-						<view class="temperature">
-							<view class="highest-temperature">
-								<text class="iconfont high-temp"></text>
-								<text v-text="value.highestTemperature"></text> 
-								<text class="iconfont c"></text>
-							</view>
-							<view class="lowerest-temperature">
-								<text class="iconfont lower-temp"></text>
-								<text v-text="value.lowerestTemperature"></text> 
-								<text class="iconfont c"></text>
-							</view>
-						</view>
-						<view class="time-aria">
-							<view class="start-time">
-								<text class="iconfont time-start"></text>
-								<text v-text="value.startTime"></text> 
-							</view>
-							<view class="end-time">
-								<text class="iconfont time-end"></text>
-								<text v-text="value.endTime"></text> 
-							</view>
-						</view>
+					<view class="day">
+						<text class="tip">白天</text>
+						<text class="day-c iconfont c" v-text="value.temp_day_c"></text>
+						<text class="day-f iconfont f" v-text="value.temp_day_f"></text>
+						<text v-text="sun_rise_time"></text>
 					</view>
+					<view class="night">
+						<text class="tip">夜晚</text>
+						<text class="night-c iconfont c" v-text="value.temp_night_c"></text>
+						<text class="night-f iconfont f" v-text="value.temp_night_f"></text>
+						<text v-text="sun_down_time"></text>
+					</view>
+					<text class="date" v-text="dealYear(value.date)"></text>
 				</view>
-				<text class="title-public">一周天气</text>
-				<view class="week">
-					<view class="li"
-					v-for="(value, index) in weekReport"
-					:key="index">
-						<text class="week-day" v-text="value.week"></text>
-						<view class="weather">
-							<text class="iconfont" :class="['wh' + value.img]"></text>
-							<text v-text="value.weather"></text>
-						</view>
-						<view class="day">
-							<text class="tip">白天</text>
-							<text class="day-c iconfont c" v-text="value.temp_day_c"></text>
-							<text class="day-f iconfont f" v-text="value.temp_day_f"></text>
-							<text v-text="sun_rise_time"></text>
-						</view>
-						<view class="night">
-							<text class="tip">夜晚</text>
-							<text class="night-c iconfont c" v-text="value.temp_night_c"></text>
-							<text class="night-f iconfont f" v-text="value.temp_night_f"></text>
-							<text v-text="sun_down_time"></text>
-						</view>
-						<text class="date" v-text="dealYear(value.date)"></text>
-					</view>
-				</view>
-				<view class="space-padding"></view>
-			</scroll-view>
+			</view>
 		</view>
-		
+		<view class="space-padding"></view>
 	</view>
 </template>
 
 <script>
-	import {sideAPI, weatherAPI} from "./../host"
+	import {sideAPI, weatherAPI} from "host"
 	import {Districts} from "./../static/districts"
 	import uniTag from './../components/uni-tag/uni-tag'
 	export default {
 		components: {
 			uniTag,
 		},
-		onLoad({q, i}) {
+		onLoad({q, n}) {
 			let vm = this
-			if(!q || !i) {
+			vm.initSetting()
+			if(!q) {
+				vm.initNowSide()
+			} else {
 				vm.q = q
-				vm.i = i
+				vm.getSideNow(q)
 			}
-			vm.initNowSide()
+			if(!n) {
+				vm.isNowSide = true
+			} else if(n == "home"){
+				vm.isNowSide = true
+			} else {
+				vm.isNowSide = false
+			}
+		},
+		onPageScroll({scrollTop}) {
+			if(scrollTop < 50) {
+				this.opacity = 0
+				return
+			} else {
+				scrollTop /= 50
+				scrollTop ^= 0
+				if(scrollTop < 7) {
+					this.opacity = scrollTop / 10
+				} else {
+					this.opacity = 0.6
+				}
+			}
 		},
 		methods: {
+			getSideNow(cityIds) {
+				var vm = this
+				vm.$req("get", weatherAPI, {
+					cityIds,
+				}, r => {
+					// 界面效果展示
+					r = r.value[0]
+					vm.noSide = r.city
+					vm.adviceList = r.indexes
+					vm.weekReport = r.weathers
+					vm.toDay = r.realtime
+					vm.featurePullTime = r.weatherDetailsInfo.publishTime
+					vm.featureList = r.weatherDetailsInfo.weather3HoursDetailsInfos
+					uni.stopPullDownRefresh()
+				})
+			},
+			initSetting() {
+				var vm = this
+				uni.getStorage({
+					key: "isInfo",
+					success({data}) {
+						vm.isInfo = data.isInfo
+					},
+				})
+				uni.getStorage({
+					key: "isWarning",
+					success({data}) {
+						vm.isWarning = data.isInfo
+					},
+				})
+			},
 			getMore(value) {
 				uni.showToast({
 					title: value,
@@ -151,22 +200,6 @@
 			},
 			dealYear(tag) {
 				return tag.replace(/^\d{4}-/, '')
-			},
-			scrollEvent(tag) {
-				tag = tag.detail
-				let scrollTop = tag.scrollTop,
-					opacity = scrollTop / 60 ^ 0
-				if(scrollTop > 10) {
-					this.lock = false
-				}
-				if(opacity > 6) {
-					opacity = 6
-				}
-				this.opacity = (opacity / 10).toFixed(1).toString()
-				//console.log(tag)
-			},
-			scorllTop() {
-				this.lock = true
 			},
 			randomImg() {
 				let url = "/static/assets/bg",
@@ -183,11 +216,9 @@
 				var vm = this,
 					reg = /\W$/,
 					nowCity
+				vm.isNowSide = true
 				uni.getLocation({
 					type:"gcj02",
-					complete(e) {
-						uni.stopPullDownRefresh()
-					},
 					success(res) {
 						let location = res.latitude + "," + res.longitude
 						vm.$req("get", sideAPI, {
@@ -230,37 +261,57 @@
 									vm.featureList = r.weatherDetailsInfo.weather3HoursDetailsInfos
 									
 									r = r.realtime
-									r.city = nowCity.name
-									r.id = nowCity.id
+									nowCity.temp = r.temp
 									uni.setStorage({
 										key: "nowSideWeather",
-										data: r,
+										data: nowCity,
 									})
+									uni.stopPullDownRefresh()
+								}, err => {
+									uni.showToast({
+										title: "获取当前城市天气信息失败",
+										duration: 1000,
+										mask: true,
+										icon: "none",
+									})
+									uni.stopPullDownRefresh()
 								})
+							}, err => {
+								uni.showToast({
+									title: "获取当前城市信息失败",
+									duration: 1000,
+									mask: true,
+									icon: "none",
+								})
+								uni.stopPullDownRefresh()
 							})
 					},
 					fail() {
-						console.log("获取定位信息失败")
+						uni.showToast({
+							title: "获取当前位置失败",
+							duration: 1000,
+							mask: true,
+							icon: "none",
+						})
+						uni.stopPullDownRefresh()
 					}
-				})
-				uni.getStorage({
-					key: "isShowWarning",
-					success({data}) {
-						vm.isShowWarning = data.isShowWarning
-					},
 				})
 			},
 		}, 
 		onPullDownRefresh() {
-			this.initNowSide()
-			this.randomImg()
+			let vm = this
+			if(!vm.q) {
+				vm.initNowSide()
+			} else {
+				vm.getSideNow(vm.q)
+			}
+			vm.randomImg()
 		},
 		data() {
 			return {
 				noSide: "",
 				initObj: {},
 				bgImg: "/static/assets/bg01.jpg",
-				boxHeight: "300px",
 				opacity: 0,
 				lock: false,
 				adviceList: [],
@@ -268,35 +319,11 @@
 				toDay: {},
 				featurePullTime: "",
 				featureList: [],
-				isShowWarning: true,
+				isInfo: true,
+				isWarning: true,
+				isNowSide: true,
 				q: "",
-				i: "",
-			}
-		},
-		computed: {
-			scrollHeight() {
-				var height,
-					width,
-					vm = this
-				uni.getSystemInfo({
-					success(info) {
-						height = info.screenHeight
-						width = info.screenWidth
-					},
-				})
-				vm.boxHeight = (height - width * 0.8 ^ 0) + "px"
-				return height + "px"
-			},
-		},
-		watch: {
-			lock(bl) {
-				if(bl) {
-					/* uni.startPullDownRefresh({
-						success(e) {
-							console.log(e)
-						}
-					}) */
-				}
+				n: "",
 			}
 		},
 	}
@@ -305,44 +332,52 @@
 <style lang="less" scoped>
 	@import "../config.less";
 	scroll-view {
-		.week {
-			column-count: 7;
-			column-width: 2upx;
-			.li {
+		width: 750upx;
+		white-space: nowrap;
+	}
+	.m-ct {
+		display: inline-block;
+		width: 750upx;
+	}
+	.week {
+		column-count: 7;
+		column-width: 2upx;
+		.li {
+			display: flex;
+			@{fd}: column;
+			@{ai}: center;
+			.date {
+				@{fs}: 20upx;
+			}
+			.week-day {
+				@{fs}: 24upx;
+				color: #fff;
+			}
+			.weather {
 				display: flex;
+				margin-top: 14upx;
 				@{fd}: column;
 				@{ai}: center;
-				.date {
+				color: #eee;
+				.iconfont {
+					@{fs}: 46upx;
+				}
+				@{fs}: 24upx;
+			}
+			.day,
+			.night {
+				display: flex;
+				@{fd}: column;
+				color: #ddd;
+				margin-top: 20upx;
+				.tip {
 					@{fs}: 20upx;
 				}
-				.week-day {
-					@{fs}: 24upx;
-					color: #fff;
-				}
-				.weather {
+				text {
 					display: flex;
-					margin-top: 14upx;
-					@{fd}: column;
-					.iconfont {
-						@{fs}: 46upx;
-					}
+					@{fd}: row-reverse;
+					@{ai}: baseline;
 					@{fs}: 24upx;
-				}
-				.day,
-				.night {
-					display: flex;
-					@{fd}: column;
-					color: #ddd;
-					margin-top: 20upx;
-					.tip {
-						@{fs}: 20upx;
-					}
-					text {
-						display: flex;
-						@{fd}: row-reverse;
-						@{ai}: baseline;
-						@{fs}: 24upx;
-					}
 				}
 			}
 		}
@@ -350,8 +385,8 @@
 	.title-public {
 		@{fs}: 42upx;
 		font-weight: 900;
-		color: #abadaa;
-		display: block;
+		color: #49afdc;
+		display: inline-block;
 		padding: 10upx 20upx;
 		margin: 50upx 0 20upx;
 	}
@@ -422,7 +457,10 @@
 				@{ai}: baseline;
 				.tip {
 					@{fs}: 26upx;
-					color: #999;
+					padding: 6upx 10upx;
+					@{bdra}: 10upx;
+					@{bgc}: #52bff0;
+					color: #eee;
 				}
 			}
 		}
@@ -432,10 +470,9 @@
 		left: 0;
 		top: 0;
 		width: 100%;
-		overflow: hidden;
 	}
 	.m-bg {
-		position: absolute;
+		position: fixed;
 		z-index: -1;
 		top: 0;
 		left: 0;
@@ -443,31 +480,30 @@
 			width: 750upx;
 		}
 	}
-	.m-ct {
-		position: absolute;
-		z-index: 2;
+	.m-hd {
 		width: 750upx;
-		&-hd {
-			width: 750upx;
-			display: flex;
-			@{jc}: space-between;
-			@{ai}: baseline;
-			.iconfont,
-			text {
-				color: #fff;
-				@{fs}: 42upx;
-			}
-			padding: 60upx 0 20upx;
-			navigator {
-				@{fs}: 40upx;
-				padding: 16upx;
-			}
-			.ml {
-				margin-left: 40upx;
-			}
-			.mr {
-				margin-right: 40upx;
-			}
+		display: flex;
+		@{jc}: space-between;
+		@{ai}: baseline;
+		position: fixed;
+		left: 0;
+		top: 0;
+		z-index: 10;
+		.iconfont,
+		text {
+			color: #fff;
+			@{fs}: 42upx;
+		}
+		padding: 60upx 0 20upx;
+		navigator {
+			@{fs}: 40upx;
+			padding: 16upx;
+		}
+		.ml {
+			margin-left: 40upx;
+		}
+		.mr {
+			margin-right: 40upx;
 		}
 	}
 </style>

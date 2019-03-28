@@ -7,11 +7,20 @@
 		<view class="m-bd">
 			<view class="m-bd-item bdb">
 				<view class="m-bd-item-left">
-					<text class="title">警告信息提醒</text>
-					<text class="tip">开启即可接受到当前位置预警通知</text>
+					<text class="title">天气提示信息提醒</text>
+					<text class="tip">开启即显示天气提示信息</text>
 				</view>
 				<view class="m-bd-item-right">
-					<switch :checked="report" color="#1296db" @change="wraningChange"/>
+					<switch :checked="info" color="#1296db" @change="infoChange"/>
+				</view>
+			</view>
+			<view class="m-bd-item bdb">
+				<view class="m-bd-item-left">
+					<text class="title">天气预警提醒</text>
+					<text class="tip">开启即显示预警信息</text>
+				</view>
+				<view class="m-bd-item-right">
+					<switch :checked="warning" color="#1296db" @change="warningChange"/>
 				</view>
 			</view>
 			<view class="m-bd-item bdb" @tap="handlerSwitch">
@@ -34,30 +43,57 @@
 <script>
 	export default {
 		methods: {
-			wraningChange({detail}) {
+			infoChange({detail}) {
 				uni.setStorage({
-					key: "isShowWarning",
-					data: {isShowWarning: detail.value},
-					complete(e) {
-						console.log(e)
+					key: "isInfo",
+					data: {isInfo: detail.value},
+					success() {
+						uni.showToast({
+							title: "设置成功!",
+							duration: 1200,
+							mask: true,
+						})
+					}
+				})
+			},
+			warningChange({detail}) {
+				uni.setStorage({
+					key: "isWarning",
+					data: {isWarning: detail.value},
+					success() {
+						uni.showToast({
+							title: "设置成功!",
+							duration: 1200,
+							mask: true,
+						})
 					}
 				})
 			},
 		},
 		data() {
 			return {
-				report: false,
+				info: false,
+				warning: false,
 			}
 		},
 		onLoad() {
 			var vm = this
 			uni.getStorage({
-				key: "isShowWarning",
+				key: "isInfo",
 				success({data}) {
-					vm.report = data.isShowWarning
+					vm.info = data.isInfo
 				},
 				fail() {
 					vm.report = false
+				},
+			})
+			uni.getStorage({
+				key: "isWarning",
+				success({data}) {
+					vm.warning = data.isWarning
+				},
+				fail() {
+					vm.warning = false
 				},
 			})
 		},

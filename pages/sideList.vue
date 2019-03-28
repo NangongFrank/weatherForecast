@@ -7,6 +7,7 @@
 			<navigator class="iconfont" url="./home">&#xe65a;</navigator>
 			<text>已添加城市</text>
 		</view>
+		<view class="space-padding"></view>
 		<view class="m-bd">
 			<view class="m-bd-item"
 			v-for="(value, index) in sideList"
@@ -28,9 +29,11 @@
 				</view>
 			</view>
 			<view class="m-bd-item">
-				<view class="delete-token"></view>
+				<view class="delete-token">
+					<text class="iconfont">&#xe61f;</text>
+				</view>
 				<view class="m-bd-item-ct">
-					<view class="title" v-text="nowSideWeather.city"></view>
+					<view class="title" @tap="jumpToNowSide(nowSideWeather)" v-text="nowSideWeather.name"></view>
 					<view class="box">
 						<view class="wd">
 							<text v-text="nowSideWeather.temp"></text>
@@ -42,6 +45,7 @@
 				</view>
 			</view>
 		</view>
+		<view class="space-padding"></view>
 	</view>
 </template>
 
@@ -66,7 +70,12 @@
 			},
 			thisSideInfo(value, index) {
 				uni.reLaunch({
-					url: "./home?q=" + value.id + "&i=" + index
+					url: "./home?q=" + value.id + "&n=" + "notHome"
+				})
+			},
+			jumpToNowSide(tag) {
+				uni.reLaunch({
+					url: "./home?q=" + tag.id + "&n=" + "home"
 				})
 			},
 			deleteItem(value, index) {
@@ -131,7 +140,6 @@
 							uni.hideLoading()
 						}
 					})
-					
 				})
 			},
 			reqNowSideWeather(tag) {
@@ -174,7 +182,6 @@
 						vm.nowSideWeather = data
 					}
 				})
-				
 			},
 		},
 		onLoad() {
@@ -201,6 +208,7 @@
 			}
 			.delete-token {
 				padding: 0 20upx;
+				width: 80upx;
 			}
 			.box {
 				width: 200upx;
@@ -239,6 +247,7 @@
 		width: 100upx;
 		height: 100upx;
 		position: fixed;
+		z-index: 10;
 		bottom: 70upx;
 		right: 40upx;
 	}
@@ -246,6 +255,11 @@
 		color: @c-hd;
 		@{ai}: center;
 		border-bottom: 2upx solid @c-bd;
+		position: fixed;
+		@{bgc}: #fff;
+		top: 0;
+		left: 0;
+		width: 100%;
 		text {
 			@{fs}: 46upx;
 			font-weight: 900;
