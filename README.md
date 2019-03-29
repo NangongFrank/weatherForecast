@@ -8,11 +8,21 @@
     * （4）预警信息，包括特大灾害等信息。
     * （5）个人与系统信息，包括个人相关信息、系统版本、升级等服务。
 
-### 天气预报API调用 
+### API
 
+* 天气预报API
+* 百度地图API定位
 
+**FilesPath**
 
-### 地理定位使用百度地图API
+* filesPath: http://pan.baidu.com/s/1REEUSdrYKdNWMkcJPgSVHQ
+    * keyCode: 4m1o
 
+### version upgrade log
 
-
+* 1.0
+  * 构建第一版，原型版本存在各种性能和功能bug
+  * `the first version, some bug with it`
+* 2.0
+  * 构建第二版，除了预警功能，基本满足需求
+  * `the second version. Function was done except warning function.`
