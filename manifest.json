@@ -9,7 +9,7 @@
         /* 5+App特有相关 */
         "splashscreen" : {
             "alwaysShowBeforeRender" : false,
-            "waiting" : true,
+            "waiting" : false,
             "autoclose" : true,
             "delay" : 0
         },
