@@ -23,7 +23,7 @@
 	],
 	"globalStyle": {
 		"navigationStyle": "custom"
-	},
+	}/* ,
 	"condition": {
 		"current": 2,
 		"list":[{
@@ -43,5 +43,5 @@
 			"path": "pages/children/AddSide",
 			"query": "name=zhang"
 		}]
-	}
+	} */
 }

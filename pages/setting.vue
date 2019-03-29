@@ -7,14 +7,14 @@
 		<view class="m-bd">
 			<view class="m-bd-item bdb">
 				<view class="m-bd-item-left">
-					<text class="title">天气提示信息提醒</text>
-					<text class="tip">开启即显示天气提示信息</text>
+					<text class="title">生活提示信息</text>
+					<text class="tip">开启即显示生活提示信息</text>
 				</view>
 				<view class="m-bd-item-right">
 					<switch :checked="info" color="#1296db" @change="infoChange"/>
 				</view>
 			</view>
-			<view class="m-bd-item bdb">
+			<!-- <view class="m-bd-item bdb">
 				<view class="m-bd-item-left">
 					<text class="title">天气预警提醒</text>
 					<text class="tip">开启即显示预警信息</text>
@@ -22,7 +22,7 @@
 				<view class="m-bd-item-right">
 					<switch :checked="warning" color="#1296db" @change="warningChange"/>
 				</view>
-			</view>
+			</view> -->
 			<view class="m-bd-item bdb" @tap="handlerSwitch">
 				<view class="m-bd-item-left">
 					<text class="title">温度单位</text>
@@ -33,7 +33,13 @@
 			<view class="m-bd-item bdb" @tap="handlerSwitch">
 				<view class="m-bd-item-left">
 					<text class="title">版本</text>
-					<text class="tip">v1.0</text>
+					<text class="tip">v1.2</text>
+				</view>
+			</view>
+			<view class="m-bd-item bdb" @tap="handlerSwitch">
+				<view class="m-bd-item-left">
+					<text class="title">关于</text>
+					<text class="tip">&copy;版权所有 拒绝盗版</text>
 				</view>
 			</view>
 		</view>
@@ -74,6 +80,7 @@
 			return {
 				info: false,
 				warning: false,
+				nowState: true,
 			}
 		},
 		onLoad() {
