@@ -1,8 +1,9 @@
 import axios from 'axios'
 import qs from "qs"
 
-const reqHost = "http://192.168.1.142:8888/wf_php/index.php"
+//const reqHost = "http://192.168.1.142:8888/wf_php/index.php"
 //const reqHost = "http://192.168.1.142/wf_php/index.php"
+const reqHost = "http://10.211.55.15/wf_php/index.php"
 
 
 function req(type, data, success, err) {
