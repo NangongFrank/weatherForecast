@@ -2641,7 +2641,7 @@ INSERT INTO `t_user` (`id`, `name`, `phone`, `pwd`, `last_login`, `u_type`) VALU
 
 CREATE TABLE `u_side` (
   `id` int(11) NOT NULL,
-  `phone` char(11) NOT NULL,
+  `u_id` varchar(20) NOT NULL,
   `code` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
