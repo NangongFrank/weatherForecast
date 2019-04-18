@@ -23,6 +23,12 @@
 					<switch :checked="warning" color="#1296db" @change="warningChange"/>
 				</view>
 			</view> -->
+			<view class="m-bd-item bdb">
+				<view class="m-bd-item-left">
+					<text class="title iconfont arrow-right" v-if="isLogin" @tap="login">用户登录</text>
+					<text class="title iconfont arrow-left" v-else @tap="logout">退出登录</text>
+				</view>
+			</view>
 			<view class="m-bd-item bdb" @tap="handlerSwitch">
 				<view class="m-bd-item-left">
 					<text class="title">温度单位</text>
@@ -75,34 +81,70 @@
 					}
 				})
 			},
+			login() {
+				uni.navigateTo({
+					url: './children/Login'
+				})
+			},
+			logout() {
+				uni.showModal({
+					title: "提示",
+					content: "确定退出当前用户？",
+					confirmColor: "rgb(102, 177, 255)",
+					complete({cancel}) {
+						if(!cancel) {
+							console.log('logout');
+						} else {
+							console.log('cacel');
+						}
+					}
+				})
+			},
+			initData() {
+				var vm = this
+				uni.getStorage({
+					key: "isInfo",
+					success({data}) {
+						vm.info = data.isInfo
+					},
+					fail() {
+						vm.report = false
+					},
+				})
+				uni.getStorage({
+					key: "isWarning",
+					success({data}) {
+						vm.warning = data.isWarning
+					},
+					fail() {
+						vm.warning = false
+					},
+				})
+				uni.getStorage({
+					key: 'userInfo',
+					success({data}) {
+						vm.isLogin = false
+					},
+					fail() {
+						vm.isLogin = true
+					},
+				})
+				uni.stopPullDownRefresh()
+			},
 		},
 		data() {
 			return {
 				info: false,
 				warning: false,
 				nowState: true,
+				isLogin: false,
 			}
 		},
+		onPullDownRefresh() {
+			this.initData()
+		},
 		onLoad() {
-			var vm = this
-			uni.getStorage({
-				key: "isInfo",
-				success({data}) {
-					vm.info = data.isInfo
-				},
-				fail() {
-					vm.report = false
-				},
-			})
-			uni.getStorage({
-				key: "isWarning",
-				success({data}) {
-					vm.warning = data.isWarning
-				},
-				fail() {
-					vm.warning = false
-				},
-			})
+			this.initData()
 		},
 	}
 </script>
@@ -132,8 +174,17 @@
 			@{jc}: space-between;
 			padding: 30upx 0 30upx 40upx;
 			&-left {
+				flex: 1;
 				display: flex;
 				@{fd}: column;
+			}
+			.arrow-right,
+			.arrow-left {
+				flex: 1;
+				display: flex;
+				@{fd}: row-reverse;
+				@{jc}: space-between;
+				@{ai}: center;
 			}
 			.title {
 				@{fs}: 44upx;

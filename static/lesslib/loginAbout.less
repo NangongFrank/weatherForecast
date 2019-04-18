@@ -1,0 +1,81 @@
+@import '../config.less';
+@import '../less-color-theme/user.less';
+page {
+	@{bgc}: @page-bg;
+}
+.m-ft {
+	margin-top: 40upx;
+	padding: 0 20upx;
+	display: flex;
+	@{fd}: column;
+	@{ai}: center;
+	&-btn {
+		width: 710upx;
+		height: 80upx;
+		@{bdra}: 40upx;
+		@{bgc}: @orange;
+		display: flex;
+		@{ai}: center;
+		@{jc}: center;
+		letter-spacing: 6upx;
+		color: #fff;
+		@{fs}: 28upx;
+	}
+	navigator {
+		margin-top: 32upx;
+		@{fs}: 28upx;
+		color: @font-small-black;
+		align-self: flex-end;
+		display: flex;
+		@{fd}: row-reverse;
+		@{ai}: center;
+	}
+}
+.m-ct {
+	padding: 0 20upx;
+	margin-top: 24upx;
+	&-item {
+		.label {
+			display: flex;
+			@{ai}: center;
+			margin-top: 20upx;
+			position: relative;
+			.iconfont {
+				@{fs}: 54upx;
+				position: absolute;
+				left: 10upx;
+				top: 50%;
+				z-index: 10;
+				transform: translateY(-50%);
+			}
+			button {
+				width: 292upx;
+				height: 80upx;
+				@{bdra}: 40upx;
+				@{bgc}: @orange;
+				border: 0;
+				&::after,
+				&::before {
+					content: none;
+				}
+				color: #fff;
+				@{fs}: 28upx;
+				display: flex;
+				@{ai}: center;
+				@{jc}: center;
+				margin-left: 20upx;
+			}
+			button[disabled] {
+				@{bgc}: @bd-glay;
+				color: @font-small-black;
+			}
+			input {
+				flex: 1;
+				border: 2upx solid @bd-glay;
+				padding: 16upx 0;
+				@{bgc}: #fff;
+				padding-left: 90upx;
+			}
+		}
+	}
+}

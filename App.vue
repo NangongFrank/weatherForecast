@@ -11,4 +11,7 @@
 	.space-padding {
 		padding: 60upx 0;
 	}
+	.padding-space {
+		padding: 48upx 0;
+	}
 </style>
