@@ -3,7 +3,7 @@
  * @Author: name
  * @Date:   2019-04-17 14:49:20
  * @Last Modified by:   zhao mac
- * @Last Modified time: 2019-04-19 17:29:55
+ * @Last Modified time: 2019-04-19 19:47:26
  */
 class SideController extends BaseController  {
     function getRows($model, $options) {
@@ -43,13 +43,23 @@ class SideController extends BaseController  {
     }
     # request weather
     function getCityCode($model, $options) {
-
+        if(!empty($options['cName'])) {
+            $res = $model -> searchCity($options);
+            $this -> echofunc([$res]);
+        } else {
+            $this -> echofunc();
+        }
     }
     # city search
     function getAboutCity($model, $options) {
-
+        if(!empty($options['cName'])) {
+            $res = $model -> searchCitys($options);
+            $this -> echofunc([$res]);
+        } else {
+            $this -> echofunc();
+        }
     }
-    # random citys
+    # random citys - hot citys
     function getRandomCity($model, $options) {
 
     }

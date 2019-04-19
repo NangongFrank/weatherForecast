@@ -2,8 +2,8 @@
 /**
  * @Author: name
  * @Date:   2019-04-17 14:48:49
- * @Last Modified by:   name
- * @Last Modified time: 2019-04-17 17:53:57
+ * @Last Modified by:   zhao mac
+ * @Last Modified time: 2019-04-19 19:47:51
  */
 class Side extends DBModel {
     function getSides($options) {
@@ -36,5 +36,15 @@ class Side extends DBModel {
         $id = $options['id'];
         $sql = "DELETE from t_area where id = $id";
         return $this -> exec($sql);
+    }
+    function searchCitys($options) {
+        $cName = $options['cName'];
+        $sql = "SELECT code as cCode, name as cName from t_area where name like '{$cName}%'";
+        return $this -> getRows($sql);
+    }
+    function searchCity($options) {
+        $cName = $options['cName'];
+        $sql = "SELECT code as cCode, name as cName from t_area where name like '{$cName}%'";
+        return $this -> getRow($sql);
     }
 }
