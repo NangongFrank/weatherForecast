@@ -2,8 +2,8 @@
 /**
  * @Author: name
  * @Date:   2019-04-17 14:49:20
- * @Last Modified by:   name
- * @Last Modified time: 2019-04-17 17:56:39
+ * @Last Modified by:   zhao mac
+ * @Last Modified time: 2019-04-19 17:29:55
  */
 class SideController extends BaseController  {
     function getRows($model, $options) {
@@ -40,5 +40,17 @@ class SideController extends BaseController  {
         } else {
             $this -> echofunc();
         }
+    }
+    # request weather
+    function getCityCode($model, $options) {
+
+    }
+    # city search
+    function getAboutCity($model, $options) {
+
+    }
+    # random citys
+    function getRandomCity($model, $options) {
+
     }
 }

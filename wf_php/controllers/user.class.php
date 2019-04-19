@@ -4,7 +4,7 @@
  * @Author: zhao mac
  * @Date:   2019-03-18 19:32:29
  * @Last Modified by:   zhao mac
- * @Last Modified time: 2019-04-19 14:59:14
+ * @Last Modified time: 2019-04-19 17:30:31
  */
 class UserController extends BaseController  {
     function getRows($model, $options) {
@@ -53,5 +53,17 @@ class UserController extends BaseController  {
         } else {
             $this -> echofunc();
         }
+    }
+    function userLogin($model, $options) {
+
+    }
+    function userRegister($model, $options) {
+
+    }
+    function getUserSides($model, $options) {
+
+    }
+    function setUserSide($model, $options) {
+        
     }
 }
