@@ -3,8 +3,8 @@
 /**
  * @Author: zhao mac
  * @Date:   2019-03-18 19:32:29
- * @Last Modified by:   name
- * @Last Modified time: 2019-04-17 17:26:31
+ * @Last Modified by:   zhao mac
+ * @Last Modified time: 2019-04-19 14:59:14
  */
 class UserController extends BaseController  {
     function getRows($model, $options) {
@@ -41,6 +41,14 @@ class UserController extends BaseController  {
     function deleteRow($model, $options) {
         if(!empty($options['id'])) {
             $res = $model -> deleteUser($options);
+            $this -> echofunc([$res]);
+        } else {
+            $this -> echofunc();
+        }
+    }
+    function getSides($model, $options) {
+        if(!empty($options['id'])) {
+            $res = $model -> getUserSides($options);
             $this -> echofunc([$res]);
         } else {
             $this -> echofunc();

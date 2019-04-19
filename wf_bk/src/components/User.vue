@@ -27,6 +27,13 @@
 				<el-button type="primary" @click="recodeEvent">确 定</el-button>
 			</div>
 		</el-dialog>
+		<el-dialog title="用户收藏地址" :visible.sync="dialogUserSideState">
+			<el-table :data="userSideList" border>
+				<el-table-column type="index" label="序号" width="50"></el-table-column>
+				<el-table-column prop="code" label="城市编号" width="140"></el-table-column>
+				<el-table-column prop="side" label="城市名称"></el-table-column>
+			</el-table>
+		</el-dialog>
 		<header>
 			<div>
 				<el-button type="primary" icon="el-icon-plus" @click="addEvent"></el-button>
@@ -47,6 +54,8 @@
 					<template slot-scope="scope">
 						<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 						<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+						<el-button size="mini" type="info" 
+						@click="handleShow(scope.$index, scope.row)">用户收藏地址</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -54,7 +63,6 @@
 	</div>
 </template>
 <script>
-var vm = this;
 export default {
 	data() {
 		return {
@@ -65,7 +73,10 @@ export default {
 			pwd: '',
 			id: '',
 			searchText: '',
-			titleStatus: false
+			titleStatus: false,
+			loadingUserSide: "",
+			userSideList: [],
+			dialogUserSideState: false,
 		};
 	},
 	created() {
@@ -240,6 +251,26 @@ export default {
 			} else {
 				vm.$store.commit('setPage', 1);
 			}
+		},
+		handleShow(index, row) {
+			let id = row.id,
+				vm = this
+			vm.$req("post", {
+				c: 'user',
+				f: "getSides",
+				id,
+			}, res => {
+				if(res.data.sides.length == 0) {
+					vm.$message({
+						message: "用户[" + res.data.userName + "]暂无收藏地址~",
+						type: "info",
+						duration: 1200 
+					})
+					return
+				}
+				vm.userSideList = res.data.sides
+				vm.dialogUserSideState = true				
+			})
 		}
 	},
 	watch: {

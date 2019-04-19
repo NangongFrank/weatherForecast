@@ -3,8 +3,8 @@
 /**
  * @Author: zhao mac
  * @Date:   2019-03-18 19:32:29
- * @Last Modified by:   name
- * @Last Modified time: 2019-04-17 17:24:58
+ * @Last Modified by:   zhao mac
+ * @Last Modified time: 2019-04-19 15:06:47
  */
 class User extends DBModel {
     function getUsers($options) {
@@ -45,5 +45,13 @@ class User extends DBModel {
         $id = $options['id'];
         $sql = "DELETE from t_user where id = $id";
         return $this -> exec($sql);
+    }
+    function getUserSides($options) {
+        $id = $options['id'];
+        $sql = "SELECT name from t_user where id = '$id'";
+        $user = $this -> getone($sql);
+        $sql = "SELECT name as side, code from t_area where code in (select code from u_side where u_id = '$id')";
+        $userSides = $this -> getRows($sql);
+        return array('userName' => $user, 'sides' => $userSides);
     }
 }

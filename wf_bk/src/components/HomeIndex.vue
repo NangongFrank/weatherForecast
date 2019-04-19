@@ -1,6 +1,6 @@
 <template>
 	<div class="home-index">
-		<h3>今日登录用户</h3>
+		<h3>最近登录用户</h3>
 		<div class="home-index-bd">
 			<el-table :data="info" border>
 				<el-table-column prop="name" label="用户名" width="280"></el-table-column>

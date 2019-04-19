@@ -2,8 +2,8 @@
 /**
  * @Author: name
  * @Date:   2019-03-18 11:18:13
- * @Last Modified by:   name
- * @Last Modified time: 2019-03-30 09:42:22
+ * @Last Modified by:   frank_zhao
+ * @Last Modified time: 2019-04-19 16:14:33
  */
 class DBModel {
 	private static $link = null;
@@ -37,11 +37,11 @@ class DBModel {
 	}
 	function getrows($sql) {
 		$result = mysqli_query(self :: $link, $sql);
+		$res = array();
 		if ($result) {
 			while ($row = mysqli_fetch_assoc($result)) {
 			    $res[] = $row;
 			}
-			return $res;
 			$this -> freeresult($result);
 			return $res;
 		} else {

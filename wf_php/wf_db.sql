@@ -2619,7 +2619,7 @@ INSERT INTO `t_area` (`id`, `name`, `code`) VALUES
 
 CREATE TABLE `t_user` (
   `id` int(11) NOT NULL,
-  `name` varchar(20) NOT NULL,
+  `name` varchar(20) CHARACTER set utf8 COLLATE utf8_bin NOT NULL,
   `phone` char(11) NOT NULL,
   `pwd` varchar(50) NOT NULL COMMENT 'md5加密',
   `last_login` datetime DEFAULT NULL,

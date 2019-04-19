@@ -46,7 +46,6 @@
 	</div>
 </template>
 <script>
-var vm = this;
 export default {
 	data() {
 		return {
