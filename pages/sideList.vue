@@ -17,7 +17,7 @@
 					<text class="iconfont">&#xe616;</text>
 				</view>
 				<view class="m-bd-item-ct">
-					<view class="title" @tap="thisSideInfo(value, index)" 
+					<view class="title" @tap="thisSideInfo(value.code)" 
 					v-text="value.province + ' - ' + value.city + ' - ' + value.area"></view>
 					<view class="box">
 						<view class="wd">
@@ -70,14 +70,14 @@
 					url: "./children/AddSide"
 				})
 			},
-			thisSideInfo(value, index) {
+			thisSideInfo(tag) {
 				uni.reLaunch({
-					url: "./home?q=" + value.id + "&n=" + "notHome"
+					url: "./home?q=" + tag + "&n=" + "notHome"
 				})
 			},
 			jumpToNowSide(tag) {
 				uni.reLaunch({
-					url: "./home?q=" + tag.id + "&n=" + "home"
+					url: "./home?q=" + tag + "&n=" + "home"
 				})
 			},
 			deleteItem(value, index) {

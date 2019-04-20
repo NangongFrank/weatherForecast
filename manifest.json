@@ -84,7 +84,9 @@
             },
             "splashscreen" : {
                 "android" : {
-                    "xxhdpi" : "static/cover/cover.png"
+                    "xxhdpi" : "static/cover/cover.png",
+                    "hdpi" : "static/cover/cover.png",
+                    "xhdpi" : "static/cover/cover.png"
                 }
             }
         }
