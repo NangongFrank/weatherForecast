@@ -26,3 +26,5 @@
 * 2.0
   * 构建第二版，除了预警功能，基本满足需求
   * `the second version. Function was done except warning function.`
+* 3.0
+  * 构建第三版，增加云存储即，本地用户和在线用户功能，支持后台用户操作和城市地址编辑
