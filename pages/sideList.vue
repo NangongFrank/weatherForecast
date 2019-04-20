@@ -17,10 +17,11 @@
 					<text class="iconfont">&#xe616;</text>
 				</view>
 				<view class="m-bd-item-ct">
-					<view class="title" @tap="thisSideInfo(value, index)" v-text="value.side"></view>
+					<view class="title" @tap="thisSideInfo(value, index)" 
+					v-text="value.province + ' - ' + value.city + ' - ' + value.area"></view>
 					<view class="box">
 						<view class="wd">
-							<text v-text="value.temp"></text>
+							<text v-text="value.temp ? value.temp : ''"></text>
 							<text class="tip iconfont" v-if="nowState">&#xe6ef;</text>
 							<text class="tip iconfont" v-else>&#xe6ee;</text>
 						</view>
@@ -40,7 +41,7 @@
 							<text class="tip iconfont" v-if="nowState">&#xe6ef;</text>
 							<text class="tip iconfont" v-else>&#xe6ee;</text>
 						</view>
-						<text @tap="reqNowSideWeather(nowSideWeather.cityIds)" class="iconfont">&#xe600;</text>
+						<text @tap="reqNowSideWeather(nowSideWeather)" class="iconfont">&#xe600;</text>
 					</view>
 				</view>
 			</view>
@@ -82,28 +83,54 @@
 			deleteItem(value, index) {
 				var vm = this
 				uni.showModal({
-					content: "确定删除城市" + value.name + "?",
+					content: "确定删除城市?",
 					title: "提示",
 					confirmColor: "rgb(102, 177, 255)",
 					complete({confirm}) {
 						if(confirm) {
-							uni.getStorage({
-								key: "sideList",
-								success({data}) {
-									data.splice(index, 1)
-									uni.showToast({
-										title: "删除成功!",
-										duration: 1000,
-									})
-									uni.setStorage({
-										key: "sideList",
-										data,
-										success() {
+							if(!vm.userId) {
+								uni.getStorage({
+									key: "sideList",
+									success({data}) {
+										data.splice(index, 1)
+										uni.showToast({
+											title: "删除成功!",
+											duration: 1000,
+										})
+										uni.setStorage({
+											key: "sideList",
+											data,
+											success() {
+												vm.initSideList()
+											},
+										})
+									}
+								})
+							} else {
+								vm.$myreq({
+									f: "rmUserSide",
+									c: "user",
+									id: value.id,
+								}, res => {
+									if(!res.data) {
+										uni.showToast({
+											title: "地区删除失败！",
+											duration: 1000,
+											icon: "none",
+											mask: true,
+										})
+									} else {
+										uni.showToast({
+											title: "地区删除成功",
+											duration: 1200,
+											mask: true,
+										})
+										setTimeout(() => {
 											vm.initSideList()
-										},
-									})
-								}
-							})
+										}, 300)
+									}
+								})
+							}
 						} else {
 							uni.showToast({
 								title: "已取消删除",
@@ -115,31 +142,70 @@
 				})
 			},
 			reqThisWeather(value, index) {
-				var vm = this,
-					obj
+				let vm = this
 				uni.showLoading({
 					title: "数据请求中...",
 					mask: true,
 				})
-				uni.getStorage({
-					key: "sideList",
-					success({data}) {
-						obj = data
-					},
-				})
-				vm.$req('get', weatherAPI, {cityIds: value.id}, res => {
+				function saveTemp() {
+					return new Promise((resolve, reject) => {
+						if(!vm.userId) {
+							reject(value.code)
+						} else {
+							resolve(value.id)
+						}
+					})
+				}
+				vm.$req('get', weatherAPI, {cityIds: value.code}, res => {
+					uni.hideLoading()
 					res = res.value[0].realtime.temp
 					value.temp = res
-					obj.splice(index, 1, value)
-					uni.setStorage({
-						key: "sideList",
-						data: obj,
-						success() {
-							vm.initSideList()
-						},
-						complete() {
-							uni.hideLoading()
+					saveTemp().then(id => {
+						vm.$myreq({
+							f: "setSideTemp",
+							c: 'user',
+							temp: res,
+							id,
+						}, res => {
+							if(!res.data) {
+								uni.showToast({
+									title: "地区温度更新失败!",
+									mask: true,
+									duration: 1000,
+									icon: "none"
+								})
+							} else {
+								uni.showToast({
+									title: "地区温度已更新...",
+									mask: true,
+									duration: 1000
+								})
+								setTimeout(() => {
+									vm.initSideList()
+								}, 1000)
+							}
+						})
+					}, sideCode => {
+						return new Promise((resolve, reject) => {
+							uni.getStorage({
+								key: "sideList",
+								success({data}) {
+									resolve({data, sideCode})
+								}
+							})
+						})
+					}).then(({data, sideCode}) => {
+						let len = data.length
+						for(let i = 0; i < len; ++i) {
+							if(data[i].code == sideCode) {
+								data[i].temp = res
+								break
+							}
 						}
+						uni.setStorage({
+							key: "sideList",
+							data,
+						})
 					})
 				})
 			},
@@ -149,7 +215,7 @@
 					title: "数据请求中...",
 					mask: true,
 				})
-				vm.$req('get', weatherAPI, {cityIds: tag.id}, res => {
+				vm.$req('get', weatherAPI, {cityIds: tag.cityIds}, res => {
 					res = res.value[0].realtime.temp
 					tag.temp = res
 					uni.setStorage({
@@ -167,9 +233,7 @@
 				})
 			},
 			initSideList() {
-				let vm = this,
-					arr,
-					len
+				let vm = this
 				function lineDoing() {
 					uni.getStorage({
 						key: "nowSideWeather",
@@ -182,8 +246,8 @@
 							key: "userInfo",
 							success({data}) {
 								data = data.data
-								vm.userId = data.id
-								resolve(data.id)
+								vm.userId = data.code
+								resolve(data.code)
 							},
 							fail() {
 								reject()
@@ -204,7 +268,7 @@
 					uni.getStorage({
 						key: "sideList",
 						success({data}) {
-							vm.sideList = data.data
+							vm.sideList = data
 						},
 						complete() {
 							uni.stopPullDownRefresh()
@@ -247,6 +311,7 @@
 			.title {
 				display: flex;
 				@{ai}: center;
+				padding-right: 30upx;
 				flex: 1;
 			}
 			.wd {

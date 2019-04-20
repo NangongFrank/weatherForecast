@@ -36,6 +36,7 @@
 				list: [],
 				searchText: "",
 				menuListState: false,
+				userId: "",
 			}
 		},
 		onPullDownRefresh() {
@@ -44,6 +45,13 @@
 		},
 		onLoad() {
 			this.initHotCitys()
+			let vm = this
+			uni.getStorage({
+				key: "userInfo",
+				success({data}) {
+					vm.userId = data.data.code
+				}
+			})
 		},
 		watch: {
 			searchText(newSide) {
@@ -81,10 +89,107 @@
 					}
 				})
 			},
-			addToSideList(data) {
-			},
 			addItem(value, index) {
-				
+				let vm = this,
+					userId = vm.userId
+				function saveSide() {
+					return new Promise((resolve, reject) => {
+						uni.getStorage({
+							key: "sideList",
+							success({data}) {
+								resolve(data.data)
+							},
+							fail() {
+								reject([])
+							}
+						})
+					})
+				}
+				if(!userId) {
+					// 保存至本地
+					saveSide().then(data => {
+						// 是否已存在
+						let len = data.length,
+							bl
+						bl = data.every(value => {
+							if(value.code == value.code) {
+								return
+							}
+						})
+						if(bl) {
+							let obj = {
+								temp: "",
+								...value
+							}
+							data.push(obj)
+							return data
+						} else {
+							uni.showToast({
+								title: "不可重复添加地址",
+								icon: "none",
+								duration: 1200,
+								mask: true,
+							})
+						}
+					}, arr => {
+						let obj = {
+							temp: "",
+							...value
+						}
+						arr.push(obj)
+						return arr
+					}).then(data => {
+						uni.setStorage({
+							key: "sideList",
+							data,
+							success() {
+								uni.showToast({
+									title: "添加成功...",
+									duration: 1000,
+									mask: true,
+								})
+								setTimeout(() => {
+									uni.navigateTo({
+										url: "./../sideList"
+									})
+								})
+							},
+							fail() {
+								uni.showToast({
+									title: "添加失败！",
+									duration: 1000,
+									mask: true,
+								})
+							}
+						})
+					})
+				} else {
+					vm.$myreq({
+						c: "user",
+						f: "setUserSide",
+						code: value.code,
+						id: vm.userId,
+					}, res => {
+						
+						if(!res.data) {
+							uni.showToast({
+								title: "不可重复添加",
+								duration: 1200,
+								icon: "none",
+							})
+						} else {
+							uni.showToast({
+								title: "地址添加成功",
+								duration: 1200,
+							})
+							setTimeout(() => {
+								uni.reLaunch({
+									url: "./../sideList"
+								})
+							}, 1000)
+						}
+					})
+				}
 			},
 		},
 	}
