@@ -51,6 +51,16 @@
 				<el-table-column prop="area" label="三级地区名" width="180"></el-table-column>
 				<el-table-column prop="city" label="二级地区名" width="180"></el-table-column>
 				<el-table-column prop="province" label="一级地区名" width="180"></el-table-column>
+				<el-table-column label="热门城市操作" width="120">
+					<template slot-scope="scope">
+						<el-button size="mini" type="primary" 
+						v-if="!scope.row.order"
+						@click="hotCity(scope.$index, scope.row, '')">添加</el-button>
+						<el-button size="mini" type="info"
+						v-else 
+						@click="hotCity(scope.$index, scope.row, 'rm')">取消</el-button>
+					</template>
+				</el-table-column>
 				<el-table-column label="操作">
 					<template slot-scope="scope">
 						<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -219,6 +229,56 @@ export default {
 					vm.$store.commit('setRowsCount', res.totalCount)
 				}
 			)
+		},
+		hotCity(index, row, type) {
+			let vm = this,
+				message
+			type = type == 'rm' ? true : false
+			if(type) {
+				message = "确定取消 [" + (row.province + '-' + row.city + '-' + row.area) + "] 热门城市?"
+			} else {
+				message = "确定添加 [" + (row.province + '-' + row.city + '-' + row.area) + "] 热门城市?"
+			}
+			vm.$confirm(message, '提示', {
+				type: "warning"
+			}).then(() => {
+				if(type) {
+					message = "rmHotCity"
+				} else {
+					message = "setHotCity"
+				}
+				vm.$req(
+					'post',
+					{
+						c: 'side',
+						f: message,
+						code: row.code,
+						id: row.id,
+					},
+					res => {
+						if (res.state == 1) {
+							vm.$message({
+								type: 'success',
+								message: '操作成功!',
+								duration: 1200
+							})
+							vm.searchEvent()
+						} else {
+							vm.$message({
+								type: 'warning',
+								message: '操作有误...',
+								duration: 1200
+							})
+						}
+					}
+				)
+			}).catch(() => {
+				vm.$message({
+					type: "info",
+					message: "已取消操作..",
+					duration: 1500,
+				})
+			})
 		},
 		initData() {
 			this.searchText = ''

@@ -2675,8 +2675,7 @@ CREATE TABLE `u_side` (
 --
 ALTER TABLE `hotcitys`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `side_code` (`side_code`),
-  ADD UNIQUE KEY `city_order` (`side_order`);
+  ADD UNIQUE KEY `side_code` (`side_code`);
 
 --
 -- Indexes for table `t_sides`

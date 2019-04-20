@@ -2,16 +2,24 @@
 /**
  * @Author: name
  * @Date:   2019-04-17 14:48:49
- * @Last Modified by:   zhao mac
- * @Last Modified time: 2019-04-20 09:03:38
+ * @Last Modified by:   frank_zhao
+ * @Last Modified time: 2019-04-20 11:35:46
  */
 class Side extends DBModel {
     function getSides($options) {
-        $sql = "SELECT code, city, province, area from t_sides";
-        $count = "SELECT count(*) from t_sides";
+        $sql = "SELECT t.code as code, t.city as city, t.province as province, t.area as area, h.side_order as `order`, h.id as id";
+        $count = "SELECT count(*)";
+        $formT = " from t_sides as t left join hotcitys as h on t.code = h.side_code";
+        $sql .= $formT;
+        $count .= $formT;
         if(!empty($options["search"])) {
             $search = $options["search"];
             $tj = " where area like '$search' or code like '$search%' or province like '$search%' or city like '$search'";
+            $sql .= $tj;
+            $count .= $tj;
+        }
+        if(!empty($options['hot'])) {
+            $tj = " where h.side_order >= 1";
             $sql .= $tj;
             $count .= $tj;
         }
@@ -41,8 +49,25 @@ class Side extends DBModel {
         return $this -> exec($sql);
     }
     function searchCity($options) {
-        $cName = $options['cName'];
-        $sql = "SELECT code as cCode, name as cName from t_sides where name like '{$cName}%'";
+        $province = $options['province'];
+        $city = $options['city'];
+        $sql = "SELECT code, province, city, area from t_sides where province like '$province%' and city like '$city%'";
         return $this -> getRow($sql);
+    }
+    function getHotCitys() {
+        $sql = "SELECT code, province, city, area from t_sides where code in (SELECT side_order from hotcitys order by side_order limit 30)";
+        return $model -> getrows($sql);
+    }
+    function addHotCity($code) {
+        $sql = "INSERT into hotcitys(side_code, side_order) values ($code, 1)";
+        return $this -> exec($sql);
+    }
+    function rmHotCity($id) {
+        $sql = "DELETE from hotcitys where id = $id";
+        return $this -> exec($sql);
+    }
+    function chOrder($id, $order) {
+        $sql = "UPDATE hotcitys set side_order = $order where id = $id";
+        return $this -> exec($sql);
     }
 }

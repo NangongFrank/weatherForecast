@@ -29,14 +29,21 @@
 		</el-dialog>
 		<el-aside style="width: auto">
 			<img @click="isCollapse = !isCollapse" src="../assets/timg.jpg" :width="isCollapse ? 64 : 200" alt="" />
-			<el-menu :default-active="$route.path" @select="selectOne" :collapse="isCollapse">
+			<el-menu 
+			:default-active="$route.path" 
+			@select="selectOne" 
+			:collapse="isCollapse">
 				<el-menu-item index="/user">
-					<i class="iconfont icon-user"></i>
+					<i class="el-icon-menu"></i>
 					<span slot="title">用户管理</span>
 				</el-menu-item>
 				<el-menu-item index="/side">
-					<i class="iconfont icon-setting"></i>
+					<i class="el-icon-location-outline"></i>
 					<span slot="title">地址管理</span>
+				</el-menu-item>
+				<el-menu-item index="/hotcity">
+					<i class="el-icon-location"></i>
+					<span slot="title">热门城市</span>
 				</el-menu-item>
 			</el-menu>
 		</el-aside>
@@ -104,39 +111,41 @@ export default {
 		changePath(path) {
 			switch (path) {
 				case '/user':
-					return '用户管理';
+					return '用户管理'
 				case '/side':
-					return '地址管理';
+					return '地址管理'
+					case '/hotcity':
+					return '热门城市'
 				default:
-					return;
+					return
 			}
 		},
 		logout(command) {
-			var vm = this;
+			var vm = this
 			if (command == 'logout') {
 				vm.$confirm('是否退出系统?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'danger'
 				}).then(() => {
-					localStorage.removeItem('adminInfo');
+					localStorage.removeItem('adminInfo')
 					vm.$message({
 						type: 'success',
 						message: '退出成功!',
 						duration: 1000,
 						onClose() {
-							vm.$router.push('/');
+							vm.$router.push('/')
 						}
-					});
-				});
+					})
+				})
 			} else if (command == 'changePwd') {
-				localStorage.removeItem('adminInfo');
-				vm.$router.push('/');
+				localStorage.removeItem('adminInfo')
+				vm.$router.push('/')
 			} else {
-				vm.oldPwd = '';
-				vm.newPwd = '';
-				vm.newRePwd = '';
-				vm.dialogFormVisible = true;
+				vm.oldPwd = ''
+				vm.newPwd = ''
+				vm.newRePwd = ''
+				vm.dialogFormVisible = true
 			}
 		},
 		recodePwdEvent() {
@@ -145,22 +154,22 @@ export default {
 				oldPwd = vm.oldPwd,
 				newPwd = vm.newPwd,
 				newRePwd = vm.newRePwd,
-				phone = vm.phone;
+				phone = vm.phone
 			if (!oldPwd || !newPwd || !newRePwd) {
 				vm.$message({
 					message: '修改密码不能有空值出现',
 					duration: 1200,
 					type: 'info'
-				});
-				return;
+				})
+				return
 			}
 			if (newPwd != newRePwd) {
 				vm.$message({
 					message: '两次新密码输入不一致',
 					duration: 1200,
 					type: 'warning'
-				});
-				return;
+				})
+				return
 			}
 			vm.$req(
 				'post',
@@ -179,59 +188,59 @@ export default {
 							duration: 1200,
 							type: 'success',
 							onClose() {
-								vm.dialogFormVisible = false;
-								vm.logout('changePwd');
+								vm.dialogFormVisible = false
+								vm.logout('changePwd')
 							}
-						});
+						})
 					} else {
 						vm.$message({
 							message: '密码修改失败',
 							duration: 1200,
 							type: 'info',
 							onClose() {
-								vm.dialogFormVisible = false;
+								vm.dialogFormVisible = false
 							}
-						});
+						})
 					}
 				}
-			);
+			)
 		},
 		checkIsLogin() {
 			var admin = localStorage.adminInfo,
-				vm = this;
+				vm = this
 			if (!admin) {
 				vm.$notify({
 					title: '提示',
-					message: '管理员信息有误，返回登录',
+					message: '管理员信息失效，请重新登录',
 					type: 'info',
 					duration: 1000,
 					onClose() {
-						vm.$router.push('/');
+						vm.$router.push('/')
 					}
-				});
+				})
 			} else {
-				admin = JSON.parse(admin);
-				vm.adminName = admin.name;
-				vm.adminCode = admin.code;
-				vm.phone = admin.phone;
+				admin = JSON.parse(admin)
+				vm.adminName = admin.name
+				vm.adminCode = admin.code
+				vm.phone = admin.phone
 			}
 		},
 		pageChange(page) {
-			this.$store.commit('setPage', page);
+			this.$store.commit('setPage', page)
 		}
 	},
 	computed: {
 		progressState() {
-			return this.$store.getters.getProgressPage;
+			return this.$store.getters.getProgressPage
 		}
 	},
 	watch: {
 		$route() {
-			this.checkIsLogin();
-			this.$store.commit('setPage', 1);
+			this.checkIsLogin()
+			this.$store.commit('setPage', 1)
 		}
 	}
-};
+}
 </script>
 <style lang="less" scoped>
 .el-container {

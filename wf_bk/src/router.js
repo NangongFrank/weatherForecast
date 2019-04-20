@@ -13,6 +13,7 @@ import NotFound from "./components/NotFound"
 
 import User from "./components/User"
 import Side from "./components/Side"
+import HotCity from "./components/HotCity"
 
 
 
@@ -37,6 +38,9 @@ let router = new Router({
         }, {
             path: "/side",
             component: Side
+        }, {
+            path: "/hotcity",
+            component: HotCity
         }]
     }, {
         path: "*",

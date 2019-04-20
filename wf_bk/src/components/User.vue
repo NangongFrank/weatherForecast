@@ -80,30 +80,27 @@ export default {
 		};
 	},
 	created() {
-		this.$store.commit('setProgressPage', 100);
-		this.getUsers();
+		this.$store.commit('setProgressPage', 100)
+		this.getUsers()
 	},
 	beforeDestory() {
-		this.$store.commit('setProgressPage', 0);
+		this.$store.commit('setProgressPage', 0)
 	},
 	methods: {
 		handleEdit(index, row) {
-			let vm = this;
-			vm.phone = row.phone;
-			vm.name = row.name;
-			vm.id = row.id;
-			vm.pwd = '';
-			vm.titleStatus = false;
-			vm.dialogFormVisible = true;
+			let vm = this
+			vm.phone = row.phone
+			vm.name = row.name
+			vm.id = row.id
+			vm.pwd = ''
+			vm.titleStatus = false
+			vm.dialogFormVisible = true
 		},
 		handleDelete(index, row) {
-			let vm = this;
-			vm.$confirm('此操作将永久删除用户, 是否继续?', '提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',
+			let vm = this
+			vm.$confirm('此操作将永久删除用户 [' + row.name + '] , 是否继续?', '提示', {
 				type: 'warning'
-			})
-				.then(() => {
+			}).then(() => {
 					vm.$req(
 						'post',
 						{
@@ -115,43 +112,45 @@ export default {
 							if (res.state == 1) {
 								vm.$message({
 									type: 'success',
-									message: '删除成功'
-								});
-								vm.searchEvent();
+									message: '删除成功',
+									duration: 1500,
+								})
+								vm.searchEvent()
 							} else {
 								vm.$message({
 									type: 'info',
-									message: '删除失败'
-								});
+									message: '删除失败',
+									duration: 1500
+								})
 							}
 						}
-					);
+					)
 				})
 				.catch(() => {
 					vm.$message({
 						type: 'info',
 						message: '已取消删除'
-					});
-				});
+					})
+				})
 		},
 		recodeEvent() {
 			let vm = this,
-				reg = /^1\d{10}$/;
+				reg = /^1\d{10}$/
 			if (!reg.test(vm.phone)) {
 				vm.$message({
 					type: 'info',
 					message: '用户手机号不合法',
 					duration: 1200
-				});
-				return;
+				})
+				return
 			}
 			if (!vm.pwd) {
 				vm.$message({
 					type: 'info',
 					message: '密码不可为空',
 					duration: 1200
-				});
-				return;
+				})
+				return
 			}
 			if (!vm.titleStatus) {
 				// edit
@@ -171,18 +170,18 @@ export default {
 								type: 'success',
 								message: '修改用户信息，成功',
 								duration: 1200
-							});
-							vm.searchEvent();
+							})
+							vm.searchEvent()
 						} else {
 							vm.$message({
 								type: 'info',
 								message: '修改失败，请检查参数',
 								duration: 1200
-							});
+							})
 						}
-						vm.dialogFormVisible = false;
+						vm.dialogFormVisible = false
 					}
-				);
+				)
 			} else {
 				// add
 				vm.$req(
@@ -200,31 +199,31 @@ export default {
 								type: 'success',
 								message: '添加成功',
 								duration: 1200
-							});
-							vm.searchEvent();
+							})
+							vm.searchEvent()
 						} else {
 							vm.$message({
 								type: 'info',
 								message: '添加失败，请检查参数',
 								duration: 1200
-							});
+							})
 						}
-						vm.dialogFormVisible = false;
+						vm.dialogFormVisible = false
 					}
-				);
+				)
 			}
 		},
 		addEvent() {
-			let vm = this;
-			vm.phone = '';
-			vm.name = '';
-			vm.id = '';
-			vm.pwd = '';
-			vm.titleStatus = true;
-			vm.dialogFormVisible = true;
+			let vm = this
+			vm.phone = ''
+			vm.name = ''
+			vm.id = ''
+			vm.pwd = ''
+			vm.titleStatus = true
+			vm.dialogFormVisible = true
 		},
 		getUsers() {
-			let vm = this;
+			let vm = this
 			vm.$req(
 				'post',
 				{
@@ -235,21 +234,21 @@ export default {
 					search: vm.searchText
 				},
 				res => {
-					vm.info = res.data;
-					vm.$store.commit('setRowsCount', res.totalCount);
+					vm.info = res.data
+					vm.$store.commit('setRowsCount', res.totalCount)
 				}
-			);
+			)
 		},
 		initData() {
-			this.searchText = '';
-			this.searchEvent();
+			this.searchText = ''
+			this.searchEvent()
 		},
 		searchEvent() {
-			let vm = this;
+			let vm = this
 			if (vm.$store.getters.getPage == 1) {
-				vm.getUsers();
+				vm.getUsers()
 			} else {
-				vm.$store.commit('setPage', 1);
+				vm.$store.commit('setPage', 1)
 			}
 		},
 		handleShow(index, row) {
@@ -262,7 +261,7 @@ export default {
 			}, res => {
 				if(res.data.sides.length == 0) {
 					vm.$message({
-						message: "用户[" + res.data.userName + "]暂无收藏地址~",
+						message: "用户 [" + res.data.userName + "] 暂无收藏地址~",
 						type: "info",
 						duration: 1200 
 					})
@@ -275,10 +274,10 @@ export default {
 	},
 	watch: {
 		'$store.getters.getPage'() {
-			this.getUsers();
+			this.getUsers()
 		}
 	}
-};
+}
 </script>
 <style lang="less" scoped>
 @import '../config';
