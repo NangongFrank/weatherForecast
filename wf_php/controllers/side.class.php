@@ -3,7 +3,7 @@
  * @Author: name
  * @Date:   2019-04-17 14:49:20
  * @Last Modified by:   zhao mac
- * @Last Modified time: 2019-04-19 19:47:26
+ * @Last Modified time: 2019-04-20 09:08:36
  */
 class SideController extends BaseController  {
     function getRows($model, $options) {
@@ -18,7 +18,7 @@ class SideController extends BaseController  {
         }
     }
     function addRow($model, $options) {
-        if(!empty($options['code']) && !empty($options['name'])) {
+        if(!empty($options['code']) && !empty($options['area']) && !empty($options['city']) && !empty($options['province'])) {
             $res = $model -> addSide($options);
             $this -> echofunc([$res]);
         } else {
@@ -26,7 +26,7 @@ class SideController extends BaseController  {
         }
     }
     function recodeRow($model, $options) {
-        if(!empty($options['code']) && !empty($options['name']) && !empty($options['id'])) {
+        if(!empty($options['code']) && !empty($options['area']) && !empty($options['city']) && !empty($options['province'])) {
             $res = $model -> recodeSide($options);
             $this -> echofunc([$res]);
         } else {
@@ -34,7 +34,7 @@ class SideController extends BaseController  {
         }
     }
     function deleteRow($model, $options) {
-        if(!empty($options['id'])) {
+        if(!empty($options['code'])) {
             $res = $model -> deleteSide($options);
             $this -> echofunc([$res]);
         } else {
@@ -52,15 +52,21 @@ class SideController extends BaseController  {
     }
     # city search
     function getAboutCity($model, $options) {
-        if(!empty($options['cName'])) {
-            $res = $model -> searchCitys($options);
+        if(isset($options['searchText'])) {
+            $options['dealPage'] = "6";
+            $res = $model -> getSides($options);
             $this -> echofunc([$res]);
         } else {
             $this -> echofunc();
         }
     }
-    # random citys - hot citys
-    function getRandomCity($model, $options) {
+    function getHotCity($model, $options) {
 
+    }
+    function setHotCity($model, $options) {
+
+    }
+    function deleteHotCity($model, $options) {
+        
     }
 }
