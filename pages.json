@@ -32,7 +32,7 @@
 	],
 	"globalStyle": {
 		"navigationStyle": "custom"
-	}/* ,
+	},
 	"condition": {
 		"current": 0,
 		"list":[{
@@ -53,4 +53,4 @@
 			"query": "name=zhang"
 		}]
 	}
- */}
+}

@@ -2,12 +2,13 @@ import Vue from 'vue'
 import App from './App'
 
 import Req from "./request"
-
+import myreq from './myRequest'
 
 import "./static/font/iconfont.css"
 
 
 Vue.prototype.$req = Req
+Vue.prototype.$myreq = myreq
 
 Vue.config.productionTip = false
 
