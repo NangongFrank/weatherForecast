@@ -4,4 +4,5 @@ export var sideAPI = "http://api.map.baidu.com/geocoder/v2/"
 export var weatherAPI = "http://aider.meizu.com/app/weather/listWeather"
 // 天气预警提示API
 //export var myServer = "http://120.79.228.56/wf_php/index.php"
-export var myServer = "http://192.168.1.195/wf_php/index.php"
+//export var myServer = "http://192.168.1.195/wf_php/index.php"
+export var myServer = "http://localhost/wf_php/index.php"
