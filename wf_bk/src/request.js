@@ -7,10 +7,10 @@ import qs from "qs"
 
 // -- onside server
 //const reqHost = "http://192.168.1.195/wf_php/index.php"
-const reqHost = "http://localhost/wf_php/index.php"
+//const reqHost = "http://localhost/wf_php/index.php"
 
 // -- online server
-//const reqHost = "http://120.79.228.56/wf_php/index.php"
+const reqHost = "http://120.79.228.56/wf_php/index.php"
 
 function req(type, data, success, err) {
     type = type.toLowerCase()

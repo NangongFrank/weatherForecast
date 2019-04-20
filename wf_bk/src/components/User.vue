@@ -27,11 +27,14 @@
 				<el-button type="primary" @click="recodeEvent">确 定</el-button>
 			</div>
 		</el-dialog>
-		<el-dialog title="用户收藏地址" :visible.sync="dialogUserSideState">
+		<el-dialog :title="' [' + nowUserName + '] 用户收藏地址'" 
+		:visible.sync="dialogUserSideState">
 			<el-table :data="userSideList" border>
 				<el-table-column type="index" label="序号" width="50"></el-table-column>
-				<el-table-column prop="code" label="城市编号" width="140"></el-table-column>
-				<el-table-column prop="side" label="城市名称"></el-table-column>
+				<el-table-column prop="code" label="城市编号" width="100"></el-table-column>
+				<el-table-column prop="province" label="一级地区名称" width="140"></el-table-column>
+				<el-table-column prop="city" label="二级地区名称" width="140"></el-table-column>
+				<el-table-column prop="area" label="三级地区名称" width="140"></el-table-column>
 			</el-table>
 		</el-dialog>
 		<header>
@@ -76,6 +79,7 @@ export default {
 			titleStatus: false,
 			loadingUserSide: "",
 			userSideList: [],
+			nowUserName: "",
 			dialogUserSideState: false,
 		};
 	},
@@ -256,18 +260,19 @@ export default {
 				vm = this
 			vm.$req("post", {
 				c: 'user',
-				f: "getSides",
+				f: "getUserSides",
 				id,
 			}, res => {
-				if(res.data.sides.length == 0) {
+				if(res.data.length == 0) {
 					vm.$message({
-						message: "用户 [" + res.data.userName + "] 暂无收藏地址~",
+						message: "用户 [" + row.name + "] 暂无收藏地址~",
 						type: "info",
 						duration: 1200 
 					})
 					return
 				}
-				vm.userSideList = res.data.sides
+				vm.nowUserName = row.name
+				vm.userSideList = res.data
 				vm.dialogUserSideState = true				
 			})
 		}
