@@ -4,7 +4,7 @@
  * @Author: zhao mac
  * @Date:   2019-03-18 19:32:29
  * @Last Modified by:   frank_zhao
- * @Last Modified time: 2019-04-20 17:03:16
+ * @Last Modified time: 2019-04-20 21:43:27
  */
 class User extends DBModel {
     function getUsers($options) {
@@ -62,13 +62,13 @@ class User extends DBModel {
     }
     function getUserAllSide($options) {
         $id = $options['id'];
-        $sql = "SELECT u.id as id, t.code as code, t.province as province, t.city as city, u.temperature as tpr from u_side as u join t_area as t on u.code = t.code where u.u_id = '$id'";
+        $sql = "SELECT u.id as id, t.code as code, t.province as province, t.city as city, t.area as area, u.temperature as temp from u_side as u join t_sides as t on u.code = t.code where u.u_id = $id";
         return $this -> getrows($sql);
     }
-    function updateTpr($options) {
-        $id = $options['usId'];
-        $tpr = $options['tpr'];
-        $sql = "UPDATE u_side set temperature = '$tpr' where id = '$id'";
+    function updateTemp($options) {
+        $id = $options['id'];
+        $temp = $options['temp'];
+        $sql = "UPDATE u_side set temperature = $temp where id = $id";
         return $this -> exec($sql);
     }
     function updateUserPwd($options) {
@@ -76,6 +76,19 @@ class User extends DBModel {
         $name = $options['name'];
         $pwd = $options["pwd"];
         $sql = "UPDATE t_user set pwd = md5('$pwd') where  phone = '$phone' and name = '$name'";
+        return $this -> exec($sql);
+    }
+    function setUserSide($id, $code) {
+        $sql = "SELECT count(*) from u_side where u_id = $id and code = $code";
+        if($this -> getone($sql) > 0) {
+            return false;
+        } else {
+            $sql = "INSERT into u_side(u_id, code) values($id, $code)";
+            return $this -> exec($sql);
+        }
+    }
+    function deleteUserSide($id) {
+        $sql = "DELETE from u_side where id = $id";
         return $this -> exec($sql);
     }
 }

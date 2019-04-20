@@ -4,7 +4,7 @@
  * @Author: zhao mac
  * @Date:   2019-03-18 19:32:29
  * @Last Modified by:   frank_zhao
- * @Last Modified time: 2019-04-20 15:02:43
+ * @Last Modified time: 2019-04-20 21:42:40
  */
 class UserController extends BaseController  {
     function getRows($model, $options) {
@@ -70,22 +70,22 @@ class UserController extends BaseController  {
     function getUserSides($model, $options) {
         if(!empty($options['id'])) {
             $res = $model -> getUserAllSide($options);
-            $this -> echofunc($res);
-        } else {
-            $this -> echofunc();
-        }
-    }
-    function setUserSide($model, $options) {
-        if(!empty($options['id'])) {
-            $res = $model -> getUserAllSide($options);
             $this -> echofunc([$res]);
         } else {
             $this -> echofunc();
         }
     }
-    function setSideTpr($model, $options) {
-        if(!empyt($options['tpr']) && !empty($options['usId'])) {
-            $res = $model -> updateTpr($options);
+    function setUserSide($model, $options) {
+        if(!empty($options['id']) && !empty($options['code'])) {
+            $res = $model -> setUserSide($options['id'], $options['code']);
+            $this -> echofunc([$res]);
+        } else {
+            $this -> echofunc();
+        }
+    }
+    function setSideTemp($model, $options) {
+        if(!empty($options['temp']) && !empty($options['id'])) {
+            $res = $model -> updateTemp($options);
             $this -> echofunc([$res]);
         } else {
             $this -> echofunc();
@@ -94,6 +94,14 @@ class UserController extends BaseController  {
     function resetUserPwd($model, $options) {
         if(!empty($options['pwd']) && !empty($options['name']) && !empty($options['phone'])) {
             $res = $model -> updateUserPwd($options);
+            $this -> echofunc([$res]);
+        } else {
+            $this -> echofunc();
+        }
+    }
+    function rmUserSide($model, $options) {
+        if(!empty($options['id'])) {
+            $res = $model -> deleteUserSide($options['id']);
             $this -> echofunc([$res]);
         } else {
             $this -> echofunc();

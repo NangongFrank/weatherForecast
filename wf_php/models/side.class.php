@@ -3,7 +3,7 @@
  * @Author: name
  * @Date:   2019-04-17 14:48:49
  * @Last Modified by:   frank_zhao
- * @Last Modified time: 2019-04-20 17:33:14
+ * @Last Modified time: 2019-04-20 20:13:00
  */
 class Side extends DBModel {
     function getSides($options) {
@@ -55,7 +55,7 @@ class Side extends DBModel {
         return $this -> getRow($sql);
     }
     function getHotCitys() {
-        $sql = "SELECT `code`,province,city,area from t_sides WHERE `code` in (SELECT `side_code` from hotcitys)  LIMIT 30";
+        $sql = "SELECT t.code as code, t.province as province, t.city as city, t.area as area from t_sides as t join hotcitys as h on t.code = h.side_code order by h.side_order desc LIMIT 30";
         return $this -> getRows($sql);
     }
     function addHotCity($code) {

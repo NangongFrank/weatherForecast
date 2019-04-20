@@ -2663,7 +2663,7 @@ CREATE TABLE `u_side` (
   `id` int(11) NOT NULL,
   `u_id` int(11) NOT NULL,
   `code` int(11) NOT NULL,
-  `temperature` char(3) DEFAULT NULL
+  `temperature` tinyint(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
