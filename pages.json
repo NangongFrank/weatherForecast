@@ -1,37 +1,22 @@
 {
-	"pages": [
-		{
-			"path": "pages/home",
-			"style": {
-				"enablePullDownRefresh": true
-			}
-		},
-		{
-			"path": "pages/setting",
-			"style": {
-				"enablePullDownRefresh": true
-			}
-		},
-		{
-			"path": "pages/sideList",
-			"style": {
-				"enablePullDownRefresh": true
-			}
+	"pages": [{
+			"path": "pages/home"
 		},{
-			"path": "pages/children/AddSide",
-			"style": {
-				"enablePullDownRefresh": true
-			}
+			"path": "pages/setting"
+		},{
+			"path": "pages/sideList"
+		},{
+			"path": "pages/children/AddSide"
 		}, {
 			"path": "pages/children/Login"
 		}, {
 			"path": "pages/children/Register"
 		}, {
 			"path": "pages/children/ResetPwd"
-		}
-	],
+		}],
 	"globalStyle": {
-		"navigationStyle": "custom"
+		"navigationStyle": "custom",
+		"enablePullDownRefresh": true
 	},
 	"condition": {
 		"current": 0,
@@ -51,6 +36,15 @@
 			"name": "添加城市",
 			"path": "pages/children/AddSide",
 			"query": "name=zhang"
+		}, {
+			"path": "pages/children/Login",
+			"name":"登录"
+		}, {
+			"path": "pages/children/Register",
+			"name":"注册"
+		}, {
+			"path": "pages/children/ResetPwd",
+			"name":"重置"
 		}]
 	}
 }

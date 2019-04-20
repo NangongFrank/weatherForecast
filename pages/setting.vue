@@ -26,7 +26,10 @@
 			<view class="m-bd-item bdb">
 				<view class="m-bd-item-left">
 					<text class="title iconfont arrow-right" v-if="isLogin" @tap="login">用户登录</text>
-					<text class="title iconfont arrow-left" v-else @tap="logout">退出登录</text>
+					<view class="title-logout" v-else>
+						<text v-text="userName"></text>
+						<text @tap="logout" class="iconfont arrow-left"></text>
+					</view>
 				</view>
 			</view>
 			<view class="m-bd-item bdb" @tap="handlerSwitch">
@@ -87,15 +90,25 @@
 				})
 			},
 			logout() {
+				let vm = this
 				uni.showModal({
 					title: "提示",
 					content: "确定退出当前用户？",
 					confirmColor: "rgb(102, 177, 255)",
 					complete({cancel}) {
 						if(!cancel) {
-							console.log('logout');
-						} else {
-							console.log('cacel');
+							uni.removeStorage({
+								key: "userInfo",
+								complete() {
+									uni.showToast({
+										title: "用户退出成功",
+										duration: 1200,
+									})
+									setTimeout(() => {
+										vm.initData()
+									}, 1000)
+								}
+							})
 						}
 					}
 				})
@@ -124,6 +137,7 @@
 					key: 'userInfo',
 					success({data}) {
 						vm.isLogin = false
+						vm.userName = data.data.userName
 					},
 					fail() {
 						vm.isLogin = true
@@ -138,6 +152,7 @@
 				warning: false,
 				nowState: true,
 				isLogin: false,
+				userName: "",
 			}
 		},
 		onPullDownRefresh() {
@@ -153,6 +168,10 @@
 	@import "../config.less";
 	.bdb {
 		border-bottom: 2upx solid @c-bd;
+	}
+	.title-logout {
+		display: flex;
+		@{jc}: space-between;
 	}
 	.m-hd {
 		color: @c-hd;
@@ -178,8 +197,7 @@
 				display: flex;
 				@{fd}: column;
 			}
-			.arrow-right,
-			.arrow-left {
+			.arrow-right {
 				flex: 1;
 				display: flex;
 				@{fd}: row-reverse;

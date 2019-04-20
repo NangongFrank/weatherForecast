@@ -7,7 +7,7 @@
 			<navigator class="iconfont ml" url="./sideList">&#xe6f9;</navigator>
 			<view class="m-hd-center">
 				<text class="iconfont" v-if="isNowSide">&#xe61f;</text>
-				<text v-text="noSide"></text>
+				<text v-text="nowSide"></text>
 			</view>
 			<navigator class="iconfont mr" url="./setting">&#xe638;</navigator>
 		</view>
@@ -122,8 +122,7 @@
 
 <script>
 	import {sideAPI, weatherAPI} from "host"
-	import {Districts} from "./../static/districts"
-	import uniTag from './../components/uni-tag/uni-tag'
+	import uniTag from '@/components/uni-tag/uni-tag'
 	export default {
 		components: {
 			uniTag,
@@ -167,10 +166,10 @@
 				}, r => {
 					// 界面效果展示
 					r = r.value[0]
-					vm.noSide = r.city
 					vm.adviceList = r.indexes
 					vm.weekReport = r.weathers
 					vm.toDay = r.realtime
+					vm.nowSide = r.provinceName + " - " + r.city
 					vm.featurePullTime = r.weatherDetailsInfo.publishTime
 					vm.featureList = r.weatherDetailsInfo.weather3HoursDetailsInfos
 					uni.stopPullDownRefresh()
@@ -213,88 +212,87 @@
 				this.bgImg = url
 			},
 			initNowSide() {
-				var vm = this,
-					reg = /\W$/,
-					nowCity
+				let vm = this
 				vm.isNowSide = true
-				uni.getLocation({
-					type:"gcj02",
-					success(res) {
-						let location = res.latitude + "," + res.longitude
-						vm.$req("get", sideAPI, {
-								location,
-								ak: "nkXgBLARGGG5RfZAhfjVKbGCwhIl30P5",
-								output: "json",
+				function lineDoing() {
+					return new Promise((resolve, reject) => {
+						uni.getLocation({
+							type:"gcj02",
+							success(res) {
+								resolve(res.latitude + "," + res.longitude)
 							},
-							res => {
-								res = res.result
-								let side = res.addressComponent,
-									cityIds
-								side.city = side.city.replace(reg, "")
-								uni.setStorage({
-									key: "backupSide",
-									data: side
-								})
-								vm.initObj = side
-								vm.noSide = side.city
-								reg = new RegExp(side.city)
-								cityIds = Districts.length
-								for(let i = 0; i < cityIds; ++i) {
-									if(reg.test(Districts[i].name)) {
-										cityIds = Districts[i].id
-										nowCity = {
-											name: Districts[i].name,
-											id: Districts[i].id
-										}
-										break
-									}
-								}
-								vm.$req("get", weatherAPI, {
-									cityIds,
-								}, r => {
-									// 界面效果展示
-									r = r.value[0]
-									vm.adviceList = r.indexes
-									vm.weekReport = r.weathers
-									vm.toDay = r.realtime
-									vm.featurePullTime = r.weatherDetailsInfo.publishTime
-									vm.featureList = r.weatherDetailsInfo.weather3HoursDetailsInfos
-									
-									r = r.realtime
-									nowCity.temp = r.temp
-									uni.setStorage({
-										key: "nowSideWeather",
-										data: nowCity,
-									})
-									uni.stopPullDownRefresh()
-								}, err => {
-									uni.showToast({
-										title: "获取当前城市天气信息失败",
-										duration: 1000,
-										mask: true,
-										icon: "none",
-									})
-									uni.stopPullDownRefresh()
-								})
-							}, err => {
+							fail() {
 								uni.showToast({
-									title: "获取当前城市信息失败",
-									duration: 1000,
-									mask: true,
+									title: "定位失败，检查是否已开启定位",
 									icon: "none",
+									duration: 2000,
 								})
 								uni.stopPullDownRefresh()
-							})
-					},
-					fail() {
-						uni.showToast({
-							title: "获取当前位置失败",
-							duration: 1000,
-							mask: true,
-							icon: "none",
+							}
+						})
+					})
+				}
+				lineDoing().then(location => {
+					return new Promise((resolve, reject) => {
+						vm.$req("get", sideAPI, {
+							location,
+							ak: "nkXgBLARGGG5RfZAhfjVKbGCwhIl30P5",
+							output: "json",
+						}, ({result}) => {
+							resolve(result)
+						}, err => {
+							 uni.showToast({
+							 	title: "获取当前位置失败",
+								icon: "none",
+								duration: 15000,
+							 })
+							 uni.stopPullDownRefresh()
+						})
+					}) 
+				}).then(result => {
+					let side = result.addressComponent,
+						province = side.province,
+						city = side.city
+					vm.nowSide = province + " - " + city
+					province = province.substr(0, 2)
+					city = city.substr(0, 2)
+					return new Promise((resolve, reject) => {
+						vm.$myreq({
+							f: "getCityCode",
+							c: "side",
+							province,
+							city,
+						}, res => {
+							resolve(res.data.code)
+						})
+					})
+				}).then(cityIds => {
+					vm.$req("get", weatherAPI, {
+						cityIds,
+					}, r => {
+						// 界面效果展示
+						r = r.value[0]
+						vm.adviceList = r.indexes
+						vm.weekReport = r.weathers
+						vm.toDay = r.realtime
+						vm.featurePullTime = r.weatherDetailsInfo.publishTime
+						vm.featureList = r.weatherDetailsInfo.weather3HoursDetailsInfos
+						r = r.realtime
+						let arr = vm.nowSide.split(" - "),
+							reg = /\W$/
+						arr = arr.map(value => {
+							return value.replace(reg, "")
+						})
+						uni.setStorage({
+							key: "nowSideWeather",
+							data: {
+								temp: r.temp,
+								side: arr.join(" - "),
+								cityIds,
+							},
 						})
 						uni.stopPullDownRefresh()
-					}
+					})
 				})
 			},
 		}, 
@@ -309,7 +307,7 @@
 		},
 		data() {
 			return {
-				noSide: "",
+				nowSide: "",
 				initObj: {},
 				bgImg: "/static/assets/bg01.jpg",
 				opacity: 0,

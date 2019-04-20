@@ -15,7 +15,7 @@
 			</view>
 		</view>
 		<view class="m-ft">
-			<view class="m-ft-btn">登录</view>
+			<view class="m-ft-btn" @tap="login">登录</view>
 			<navigator url="./ResetPwd">忘记密码?</navigator>
 		</view>
 	</view>
@@ -31,10 +31,64 @@
 			return {
 				loginCode: "",
 				pwd: "",
-				phone: "",
-				message: "",
 			}
 		},
+		onPullDownRefresh() {
+			this.initData()
+		},
+		methods: {
+			login() {
+				let vm = this,
+					info = vm.loginCode,
+					pwd = vm.pwd
+				if(!info || !pwd) {
+					uni.showToast({
+						duration: 1200,
+						title: "用户名和密码不可为空",
+						icon: "none",
+					})
+					return
+				}
+				vm.$myreq({
+					info,
+					pwd,
+					f: 'userlogin',
+					c: 'user',
+				}, res => {
+					if(!res.state) {
+						uni.showToast({
+							title: "用户不存在",
+							duration: 1200,
+							mask: true,
+							icon: "none"
+						})
+					} else {
+						uni.showToast({
+							title: "欢迎用户使用",
+							duration: 1200,
+							mask: true,
+						})
+						uni.setStorage({
+							key: "userInfo",
+							data: res,
+							complete() {
+								setTimeout(() => {
+									uni.reLaunch({
+										url: './../setting'
+									})
+								}, 1000)
+							}
+						})
+					}
+				})
+			},
+			initData() {
+				let vm = this
+				vm.pwd = ""
+				vm.loginCode = ""
+				uni.stopPullDownRefresh()
+			}
+		}
 	}
 </script>
 

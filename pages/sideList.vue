@@ -17,7 +17,7 @@
 					<text class="iconfont">&#xe616;</text>
 				</view>
 				<view class="m-bd-item-ct">
-					<view class="title" @tap="thisSideInfo(value, index)" v-text="value.name"></view>
+					<view class="title" @tap="thisSideInfo(value, index)" v-text="value.side"></view>
 					<view class="box">
 						<view class="wd">
 							<text v-text="value.temp"></text>
@@ -33,14 +33,14 @@
 					<text class="iconfont">&#xe61f;</text>
 				</view>
 				<view class="m-bd-item-ct">
-					<view class="title" @tap="jumpToNowSide(nowSideWeather)" v-text="nowSideWeather.name"></view>
+					<view class="title" @tap="jumpToNowSide(nowSideWeather.cityIds)" v-text="nowSideWeather.side"></view>
 					<view class="box">
 						<view class="wd">
 							<text v-text="nowSideWeather.temp"></text>
 							<text class="tip iconfont" v-if="nowState">&#xe6ef;</text>
 							<text class="tip iconfont" v-else>&#xe6ee;</text>
 						</view>
-						<text @tap="reqNowSideWeather(nowSideWeather)" class="iconfont">&#xe600;</text>
+						<text @tap="reqNowSideWeather(nowSideWeather.cityIds)" class="iconfont">&#xe600;</text>
 					</view>
 				</view>
 			</view>
@@ -57,6 +57,7 @@
 				nowState: true,
 				sideList: [],
 				nowSideWeather: {},
+				userId: "",
 			}
 		},
 		onPullDownRefresh() {
@@ -161,27 +162,55 @@
 							uni.hideLoading()
 						}
 					})
+				}, err => {
+					uni.hideLoading()
 				})
 			},
 			initSideList() {
-				var vm = this,
+				let vm = this,
 					arr,
 					len
-				uni.getStorage({
-					key: "sideList",
-					success({data}) {
-						vm.sideList = data
-					},
-					complete() {
+				function lineDoing() {
+					uni.getStorage({
+						key: "nowSideWeather",
+						success({data}) {
+							vm.nowSideWeather = data
+						}
+					})
+					return new Promise((resolve, reject) => {
+						uni.getStorage({
+							key: "userInfo",
+							success({data}) {
+								data = data.data
+								vm.userId = data.id
+								resolve(data.id)
+							},
+							fail() {
+								reject()
+							}
+						})
+					})
+				}	
+				lineDoing().then(id => {
+					vm.$myreq({
+						f: "getUserSides",
+						c: "user",
+						id,
+					}, res => {
+						vm.sideList = res.data
 						uni.stopPullDownRefresh()
-					},
-				})
-				uni.getStorage({
-					key: "nowSideWeather",
-					success({data}) {
-						vm.nowSideWeather = data
-					}
-				})
+					})
+				}, () => {
+					uni.getStorage({
+						key: "sideList",
+						success({data}) {
+							vm.sideList = data.data
+						},
+						complete() {
+							uni.stopPullDownRefresh()
+						},
+					})
+				})				
 			},
 		},
 		onLoad() {

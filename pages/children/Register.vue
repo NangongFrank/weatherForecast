@@ -23,7 +23,7 @@
 			</view>
 		</div>
 		<view class="m-ft">
-			<view class="m-ft-btn">注册</view>
+			<view class="m-ft-btn" @tap="register">注册</view>
 			<navigator url="/pages/children/Login"  class="iconfont arrow-right">已有账号?前往登录</navigator>
 		</view>
 	</view>
@@ -39,11 +39,84 @@
 			return {
 				name: "",
 				phone: "",
-				message: "",
 				pwd: "",
 				rePwd: "",
 			}
 		},
+		methods: {
+			register() {
+				let vm = this,
+					name = vm.name,
+					phone = vm.phone,
+					pwd = vm.pwd,
+					rePwd = vm.rePwd
+				if(!name) {
+					uni.showToast({
+						icon: "none",
+						title: "用户名不可为空",
+						duration: 1500,
+					})
+					return
+				}
+				if(!/^1\d{10}$/.test(phone)) {
+					uni.showToast({
+						icon: "none",
+						title: "手机号码格式不正确",
+						duration: 1500,
+					})
+					return
+				}
+				if(!pwd || !rePwd) {
+					uni.showToast({
+						icon: "none",
+						title: "密码不可留空",
+						duration: 1500,
+					})
+					return
+				}
+				if(pwd != rePwd) {
+					uni.showToast({
+						icon: "none",
+						title: "两次密码不一致",
+						duration: 1500,
+					})
+					return
+				}
+				if(pwd.length < 4) {
+					uni.showToast({
+						icon: "none",
+						title: "密码过于简单",
+						duration: 1500,
+					})
+					return
+				}
+				vm.$myreq({
+					name,
+					phone,
+					pwd,
+					f: "addrow",
+					c: 'user',
+				}, res => {
+					if(!res.state) {
+						uni.showToast({
+							title: "请重试...",
+							duration: 1500,
+							icon: "none",
+						})
+					} else {
+						uni.showToast({
+							title: "用户注册成功",
+							duration: 1100,
+						})
+						setTimeout(() => {
+							uni.navigateTo({
+								url: "Login",
+							})
+						}, 1000)
+					}
+				})
+			},
+		}
 	}
 </script>
 
