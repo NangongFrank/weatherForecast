@@ -3,8 +3,8 @@
 /**
  * @Author: zhao mac
  * @Date:   2019-03-18 19:32:29
- * @Last Modified by:   zhao mac
- * @Last Modified time: 2019-04-19 19:36:34
+ * @Last Modified by:   frank_zhao
+ * @Last Modified time: 2019-04-20 15:02:43
  */
 class UserController extends BaseController  {
     function getRows($model, $options) {
@@ -58,7 +58,7 @@ class UserController extends BaseController  {
     function userLogin($model, $options) {
         if(!empty($options['info']) && !empty($options['pwd'])) {
             $res = $model -> checkUserInfo($options);
-            if(count($res) > 0) {
+            if($res) {
                 $this -> echofunc([$res]);
             } else {
                 $this -> echofunc();
@@ -86,6 +86,14 @@ class UserController extends BaseController  {
     function setSideTpr($model, $options) {
         if(!empyt($options['tpr']) && !empty($options['usId'])) {
             $res = $model -> updateTpr($options);
+            $this -> echofunc([$res]);
+        } else {
+            $this -> echofunc();
+        }
+    }
+    function resetUserPwd($model, $options) {
+        if(!empty($options['pwd']) && !empty($options['name']) && !empty($options['phone'])) {
+            $res = $model -> updateUserPwd($options);
             $this -> echofunc([$res]);
         } else {
             $this -> echofunc();

@@ -2,8 +2,8 @@
 /**
  * @Author: name
  * @Date:   2019-04-17 14:49:20
- * @Last Modified by:   zhao mac
- * @Last Modified time: 2019-04-20 11:02:56
+ * @Last Modified by:   frank_zhao
+ * @Last Modified time: 2019-04-20 17:51:54
  */
 class SideController extends BaseController  {
     function getRows($model, $options) {
@@ -52,10 +52,10 @@ class SideController extends BaseController  {
     }
     # city search
     function getAboutCity($model, $options) {
-        if(isset($options['searchText'])) {
-            $options['dealPage'] = "6";
+        if(isset($options['search'])) {
+            $options['dealPage'] = "30";
             $res = $model -> getSides($options);
-            $this -> echofunc([$res]);
+            $this -> echofunc($res);
         } else {
             $this -> echofunc();
         }

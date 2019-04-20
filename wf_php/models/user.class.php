@@ -3,8 +3,8 @@
 /**
  * @Author: zhao mac
  * @Date:   2019-03-18 19:32:29
- * @Last Modified by:   zhao mac
- * @Last Modified time: 2019-04-19 19:38:58
+ * @Last Modified by:   frank_zhao
+ * @Last Modified time: 2019-04-20 17:03:16
  */
 class User extends DBModel {
     function getUsers($options) {
@@ -57,18 +57,25 @@ class User extends DBModel {
     function checkUserInfo($options) {
         $info = $options['info'];
         $pwd = $options['pwd'];
-        $sql = "SELECT id as code, name as userName, phone from t_user where (name = '$info' or phone = '$info') and md5('$pwd')";
+        $sql = "SELECT id as code, name as userName, phone from t_user where (name = '$info' or phone = '$info') and md5('$pwd') and id <> 1";
         return $this -> getrow($sql);
     }
     function getUserAllSide($options) {
         $id = $options['id'];
-        $sql = "SELECT u.id as code, t.code as cCode, t.name as cName, u.temperature as tpr from u_side as u join t_area as t on u.code = t.code where u.u_id = '$id'";
+        $sql = "SELECT u.id as id, t.code as code, t.province as province, t.city as city, u.temperature as tpr from u_side as u join t_area as t on u.code = t.code where u.u_id = '$id'";
         return $this -> getrows($sql);
     }
     function updateTpr($options) {
         $id = $options['usId'];
         $tpr = $options['tpr'];
         $sql = "UPDATE u_side set temperature = '$tpr' where id = '$id'";
+        return $this -> exec($sql);
+    }
+    function updateUserPwd($options) {
+        $phone = $options['phone'];
+        $name = $options['name'];
+        $pwd = $options["pwd"];
+        $sql = "UPDATE t_user set pwd = md5('$pwd') where  phone = '$phone' and name = '$name'";
         return $this -> exec($sql);
     }
 }
