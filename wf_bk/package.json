@@ -1,6 +1,6 @@
 {
-  "name": "testmanage-back",
-  "discription": "学生课题管理后台",
+  "name": "weatherForecast",
+  "discription": "天气系统后台",
   "version": "0.1.0",
   "private": true,
   "scripts": {
