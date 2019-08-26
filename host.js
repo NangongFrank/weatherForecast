@@ -8,7 +8,7 @@ let weatherAPI = "http://aider.meizu.com/app/weather/listWeather"
 
 // 资源服务器
 //let myServer = "http://120.79.228.56/wf_php/index.php"
-let myServer = "https://www.ngfrankgl.cn/wf_php/index.php"
+let myServer = "https://api.ngfrankgl.cn/wf_php/index.php"
 //export var myServer = "http://192.168.1.195/wf_php/index.php"
 //export var myServer = "http://localhost/wf_php/index.php"
 

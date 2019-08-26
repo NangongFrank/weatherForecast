@@ -58,7 +58,7 @@
                     "xxhdpi" : "unpackage/res/icons/144x144.png"
                 },
                 "ios" : {
-                    "appstore" : "static/cover/token.png",
+                    "appstore" : "unpackage/res/icons/1024x1024.png",
                     "ipad" : {
                         "app" : "unpackage/res/icons/76x76.png",
                         "app@2x" : "unpackage/res/icons/152x152.png",
@@ -96,9 +96,19 @@
     /* 快应用特有相关 */
     "mp-weixin" : {
         /* 小程序特有相关 */
-        "appid" : "",
+        "appid" : "wx65670f9c361d0227",
         "setting" : {
-            "urlCheck" : true
+            "urlCheck" : true,
+            "postcss" : true,
+            "es6" : true,
+            "minified" : true
+        },
+        "permission" : {}
+    },
+    "h5" : {
+        "title" : "天气预报",
+        "devServer" : {
+            "https" : false
         }
     }
 }
