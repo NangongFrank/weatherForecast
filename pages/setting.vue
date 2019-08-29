@@ -59,17 +59,30 @@
 	export default {
 		methods: {
 			infoChange({detail}) {
-				uni.setStorage({
-					key: "isInfo",
-					data: {isInfo: detail.value},
-					success() {
+				// console.log(JSON.stringify(detail));
+				if(detail.value) {
+					uni.setStorage({
+						key: "isInfo",
+						data: {isInfo: true},
+					}).then(() => {
 						uni.showToast({
-							title: "设置成功!",
-							duration: 1200,
+							title: "已开启!",
 							mask: true,
+							icon: 'none',
 						})
-					}
-				})
+					})
+				} else {
+					uni.removeStorage({
+						key: 'isInfo'
+					}).then(() => {
+						uni.showToast({
+							title: "已关闭...",
+							mask: true,
+							icon: 'none',
+						})
+					})
+				}
+				
 			},
 			warningChange({detail}) {
 				uni.setStorage({
@@ -117,31 +130,26 @@
 				var vm = this
 				uni.getStorage({
 					key: "isInfo",
-					success({data}) {
-						vm.info = data.isInfo
-					},
-					fail() {
-						vm.report = false
-					},
+				}).then(([err, {data}]) => {
+					vm.info = true
+				}).catch(e => {
+					vm.info = false
+					vm.report = false
 				})
 				uni.getStorage({
 					key: "isWarning",
-					success({data}) {
-						vm.warning = data.isWarning
-					},
-					fail() {
-						vm.warning = false
-					},
+				}).then(([err, {data}]) => {
+					vm.warning = data.isWarning
+				}).catch(e => {
+					vm.warning = false
 				})
 				uni.getStorage({
 					key: 'userInfo',
-					success({data}) {
-						vm.isLogin = false
-						vm.userName = data.data.userName
-					},
-					fail() {
-						vm.isLogin = true
-					},
+				}).then(([err, {data}]) => {
+					vm.isLogin = false
+					vm.userName = data.data.userName
+				}).catch(e => {
+					vm.isLogin = true
 				})
 				uni.stopPullDownRefresh()
 			},
@@ -166,6 +174,12 @@
 
 <style lang="less" scoped>
 	@import "../config.less";
+	.m-setting {
+		@{fs}: 36upx;
+	}
+	switch {
+		transform: scale(.7);
+	}
 	.bdb {
 		border-bottom: 2upx solid @c-bd;
 	}

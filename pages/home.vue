@@ -179,15 +179,15 @@
 				var vm = this
 				uni.getStorage({
 					key: "isInfo",
-					success({data}) {
-						vm.isInfo = data.isInfo
-					},
+				}).then(() => {
+					this.isInfo = true
+				}).catch(() => {
+					this.isInfo = false
 				})
 				uni.getStorage({
 					key: "isWarning",
-					success({data}) {
-						vm.isWarning = data.isInfo
-					},
+				}).then(([err, {data}]) => {
+					vm.isWarning = data.isInfo
 				})
 			},
 			getMore(value) {
@@ -212,6 +212,9 @@
 				this.bgImg = url
 			},
 			initNowSide() {
+				uni.showLoading({
+					title: '数据获取中...'
+				})
 				let vm = this
 				vm.isNowSide = true
 				function lineDoing() {
@@ -227,6 +230,7 @@
 									icon: "none",
 									duration: 2000,
 								})
+								uni.hideLoading()
 								uni.stopPullDownRefresh()
 							}
 						})
@@ -246,6 +250,7 @@
 								icon: "none",
 								duration: 15000,
 							 })
+							 uni.hideLoading()
 							 uni.stopPullDownRefresh()
 						})
 					}) 
@@ -291,6 +296,7 @@
 								cityIds,
 							},
 						})
+						uni.hideLoading()
 						uni.stopPullDownRefresh()
 					})
 				})
@@ -317,7 +323,7 @@
 				toDay: {},
 				featurePullTime: "",
 				featureList: [],
-				isInfo: true,
+				isInfo: false,
 				isWarning: true,
 				isNowSide: true,
 				q: "",
