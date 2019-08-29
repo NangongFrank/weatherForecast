@@ -1,7 +1,7 @@
 <template>
 	<view>
-		<login-header title="登录"  show-register :back-path="'/pages/setting'"/>
-		<view class="padding-space"></view>
+		<!-- <login-header title="登录"  show-register :back-path="'/pages/setting'"/> -->
+		<!-- <view class="padding-space"></view> -->
 		<view class="m-ct">
 			<view class="m-ct-item">
 				<view class="label">
@@ -16,17 +16,18 @@
 		</view>
 		<view class="m-ft">
 			<view class="m-ft-btn" @tap="login">登录</view>
-			<navigator url="./ResetPwd">忘记密码?</navigator>
+			<navigator url="/pages/children/ResetPwd">忘记密码?</navigator>
+			<navigator url="/pages/children/Register">前往注册</navigator>
 		</view>
 	</view>
 </template>
 
 <script>
-	import loginHeader from "@/components/LoginHeader"
+	// import loginHeader from "@/components/LoginHeader"
 	export default {
-		components: {
-			loginHeader,
-		},
+		// components: {
+		// 	loginHeader,
+		// },
 		data() {
 			return {
 				loginCode: "",

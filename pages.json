@@ -8,11 +8,26 @@
 		},{
 			"path": "pages/children/AddSide"
 		}, {
-			"path": "pages/children/Login"
+			"path": "pages/children/Login",
+			"style": {
+				"navigationBarTitleText": "用户登录",
+				"navigationStyle": "default",
+				"navigationBarTextStyle": "black"
+			}
 		}, {
-			"path": "pages/children/Register"
+			"path": "pages/children/Register",
+			"style": {
+				"navigationBarTitleText": "用户注册",
+				"navigationStyle": "default",
+				"navigationBarTextStyle": "black"
+			}
 		}, {
-			"path": "pages/children/ResetPwd"
+			"path": "pages/children/ResetPwd",
+			"style": {
+				"navigationBarTitleText": "重置用户密码",
+				"navigationStyle": "default",
+				"navigationBarTextStyle": "black"
+			}
 		}],
 	"globalStyle": {
 		"navigationStyle": "custom",

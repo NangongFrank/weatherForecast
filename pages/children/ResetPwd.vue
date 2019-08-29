@@ -1,7 +1,7 @@
 <template>
 	<view>
-		<login-header title="重置密码" />
-		<view class="padding-space"></view>
+		<!-- <login-header title="重置密码" />
+		<view class="padding-space"></view> -->
 		<view class="m-ct">
 			<view class="m-ct-item">
 				<view class="label">
@@ -30,11 +30,11 @@
 </template>
 
 <script>
-	import loginHeader from "@/components/LoginHeader"
+	// import loginHeader from "@/components/LoginHeader"
 	export default {
-		components: {
-			loginHeader,
-		},
+		// components: {
+		// 	loginHeader,
+		// },
 		data() {
 			return {
 				pwd: "",
