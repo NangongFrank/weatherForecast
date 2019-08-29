@@ -1,6 +1,6 @@
 <template>
 	<view class="m-home" :style="{'background-color': 'rgba(21, 21, 21,' + opacity + ')'}">
-		<view class="m-bg" :style="{height: pageHeight}">
+		<view class="m-bg">
 			<image class="bgi" :src="bgImg" mode="widthFix"></image>
 		</view>
 		<view class="m-hd" :style="{'background-color': 'rgba(21, 21, 21,' + (opacity + 0.2) + ')'}">
@@ -9,12 +9,12 @@
 				<text class="iconfont" v-if="isNowSide">&#xe61f;</text>
 				<text v-text="nowSide"></text>
 			</view>
-			<navigator class="iconfont mr" url="./setting">&#xe638;</navigator>
+			<navigator class="iconfont mr" url="/pages/setting">&#xe638;</navigator>
 		</view>
 		<view class="space-padding"></view>
 		<view class="m-ct">
-			<view class="ad-if">
-				<view class="ad-if-ct" v-if="isInfo">
+			<view class="ad-if" v-if="isInfo">
+				<view class="ad-if-ct">
 					<view class="ad-if-ct-item"
 					v-for="(value, index) in adviceList"
 					:key="index">
@@ -130,9 +130,6 @@
 		onLoad({q, n}) {
 			let vm = this
 			vm.initSetting()
-			uni.getSystemInfo().then(([err, {windowHeight}]) => {
-				this.pageHeight = windowHeight + 'px'
-			})
 			if(!q) {
 				vm.initNowSide()
 			} else {
@@ -182,16 +179,18 @@
 				var vm = this
 				uni.getStorage({
 					key: "isInfo",
-				}).then(() => {
-					this.isInfo = true
-				}).catch(() => {
-					this.isInfo = false
+				}).then(([err]) => {
+					if(err) this.isInfo = false
+					else this.isInfo = true
 				})
-				uni.getStorage({
-					key: "isWarning",
-				}).then(([err, {data}]) => {
-					vm.isWarning = data.isInfo
-				})
+				// TODO: 天气报警提示，需要使用收费api实现其功能
+				// uni.getStorage({
+				// 	key: "isWarning",
+				// }).then(([err, {data}]) => {
+				// 	vm.isWarning = data.isInfo
+				// }).catch(e => {
+				// 	console.log(e)
+				// })
 			},
 			getMore(value) {
 				uni.showToast({
@@ -228,13 +227,12 @@
 								resolve(res.latitude + "," + res.longitude)
 							},
 							fail() {
+								uni.hideLoading()
 								uni.showToast({
 									title: "定位失败，检查是否已开启定位",
 									icon: "none",
 									duration: 2000,
 								})
-								uni.hideLoading()
-								// uni.stopPullDownRefresh()
 							}
 						})
 					})
@@ -254,7 +252,6 @@
 								duration: 15000,
 							 })
 							 uni.hideLoading()
-							 // uni.stopPullDownRefresh()
 						})
 					}) 
 				}).then(result => {
@@ -300,7 +297,6 @@
 							},
 						})
 						uni.hideLoading()
-						// uni.stopPullDownRefresh()
 					})
 				})
 			},
@@ -318,7 +314,6 @@
 		data() {
 			return {
 				nowSide: "",
-				pageHeight: '667px',
 				initObj: {},
 				bgImg: "/static/assets/bg01.jpg",
 				opacity: 0,

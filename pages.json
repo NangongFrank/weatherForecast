@@ -12,21 +12,24 @@
 			"style": {
 				"navigationBarTitleText": "用户登录",
 				"navigationStyle": "default",
-				"navigationBarTextStyle": "black"
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor":"#FFFFFF"
 			}
 		}, {
 			"path": "pages/children/Register",
 			"style": {
 				"navigationBarTitleText": "用户注册",
 				"navigationStyle": "default",
-				"navigationBarTextStyle": "black"
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor":"#FFFFFF"
 			}
 		}, {
 			"path": "pages/children/ResetPwd",
 			"style": {
 				"navigationBarTitleText": "重置用户密码",
 				"navigationStyle": "default",
-				"navigationBarTextStyle": "black"
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor":"#FFFFFF"
 			}
 		}],
 	"globalStyle": {

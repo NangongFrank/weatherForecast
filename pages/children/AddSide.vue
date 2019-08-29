@@ -152,7 +152,7 @@
 									uni.navigateTo({
 										url: "./../sideList"
 									})
-								})
+								}, 1000)
 							},
 							fail() {
 								uni.showToast({

@@ -96,14 +96,15 @@
     /* 快应用特有相关 */
     "mp-weixin" : {
         /* 小程序特有相关 */
-        "appid" : "wx65670f9c361d0227",
+        "appid" : "",
         "setting" : {
-            "urlCheck" : true,
-            "postcss" : true,
+            "urlCheck" : false,
+            "postcss" : false,
             "es6" : true,
             "minified" : true
         },
-        "permission" : {}
+        "permission" : {},
+        "usingComponents" : false
     },
     "h5" : {
         "title" : "天气预报",
