@@ -1,6 +1,6 @@
 <template>
 	<view class="m-home" :style="{'background-color': 'rgba(21, 21, 21,' + opacity + ')'}">
-		<view class="m-bg">
+		<view class="m-bg" :style="{height: pageHeight}">
 			<image class="bgi" :src="bgImg" mode="widthFix"></image>
 		</view>
 		<view class="m-hd" :style="{'background-color': 'rgba(21, 21, 21,' + (opacity + 0.2) + ')'}">
@@ -116,7 +116,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="space-padding"></view>
+		<!-- <view class="space-padding"></view> -->
 	</view>
 </template>
 
@@ -130,6 +130,9 @@
 		onLoad({q, n}) {
 			let vm = this
 			vm.initSetting()
+			uni.getSystemInfo().then(([err, {windowHeight}]) => {
+				this.pageHeight = windowHeight + 'px'
+			})
 			if(!q) {
 				vm.initNowSide()
 			} else {
@@ -231,7 +234,7 @@
 									duration: 2000,
 								})
 								uni.hideLoading()
-								uni.stopPullDownRefresh()
+								// uni.stopPullDownRefresh()
 							}
 						})
 					})
@@ -251,7 +254,7 @@
 								duration: 15000,
 							 })
 							 uni.hideLoading()
-							 uni.stopPullDownRefresh()
+							 // uni.stopPullDownRefresh()
 						})
 					}) 
 				}).then(result => {
@@ -297,7 +300,7 @@
 							},
 						})
 						uni.hideLoading()
-						uni.stopPullDownRefresh()
+						// uni.stopPullDownRefresh()
 					})
 				})
 			},
@@ -310,10 +313,12 @@
 				vm.getSideNow(vm.q)
 			}
 			vm.randomImg()
+			uni.stopPullDownRefresh()
 		},
 		data() {
 			return {
 				nowSide: "",
+				pageHeight: '667px',
 				initObj: {},
 				bgImg: "/static/assets/bg01.jpg",
 				opacity: 0,
@@ -483,6 +488,7 @@
 		image {
 			width: 750upx;
 		}
+		overflow: hidden;
 	}
 	.m-hd {
 		width: 750upx;
